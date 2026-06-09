@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="container main-container px-5">
+  <div class="container-left pt-5">
+    {% if user.is_authenticated %}
+
+    <div class="alert alert-success">Welcome Back {{ user.username }} 🎹</div>
+
+    {% endif %}
+
+    <span class="badge bg-success"> New Arrivals 2026 </span>
+
+    <h1 class="homeh3">
+      Elevate Your
+      <span class="style"> Musical </span>
+      Journey
+    </h1>
+
+    <p class="homep">
+      Discover premium keyboards, pianos and <br />
+      musical instruments crafted for performers, creators <br />
+      and music enthusiasts.
+    </p>
+
+    <div class="home-stats">
+      <div class="home-stats-stat">
+        <span class="stat-color">500+</span>
+        <span class="text-white"> Premium Products </span>
+      </div>
+
+      <div class="home-stats-stat">
+        <span class="stat-color">24H</span>
+        <span class="text-white"> Fast Delivery </span>
+      </div>
+
+      <div class="home-stats-stat">
+        <span class="stat-color">100%</span>
+        <span class="text-white"> Genuine Products </span>
+      </div>
+    </div>
+
+    <a href="{% url 'viewproduct' %}" class="btn btn-danger mt-4">
+      Explore Products
+    </a>
+  </div>
+
+  <div class="container-right pt-5">
+    <img src="{% static 'images/piano.jpg' %}" alt="Piano" width="300" />
+  </div>
+</div>
+
+{% endblock %}

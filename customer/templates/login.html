@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="register-container container mt-5" style="max-width: 500px">
+  <div class="register-card card shadow p-4">
+    <h2 class="text-center mb-4">Login</h2>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        {{ form.username.label_tag }} {{ form.username }}
+        <small class="text-danger"> {{ form.username.errors }} </small>
+      </div>
+
+      <div class="mb-3">
+        {{ form.password.label_tag }} {{ form.password }}
+        <small class="text-danger"> {{ form.password.errors }} </small>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <p class="text-right mt-3">
+      Don't have an account?
+      <a href="{% url 'register' %}" class="text-danger">Register</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

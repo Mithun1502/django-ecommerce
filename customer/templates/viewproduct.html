@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>All Products</h2>
+
+    <a href="{% url 'cart' %}" class="btn btn-primary"> Ready To Checkout </a>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    {% for product in products %}
+
+    <div class="col-md-4 mb-4">
+      <div class="card shadow h-100">
+        {% if product.image %}
+        <img
+          src="{{ product.image.url }}"
+          class="card-img-top"
+          alt="{{ product.name }}"
+          style="height: 200px; object-fit: contain"
+        />
+        {% endif %}
+
+        <div class="card-body">
+          <h5>{{ product.name }}</h5>
+
+          <p>{{ product.description }}</p>
+
+          <h4 class="text-success">₹{{ product.price }}</h4>
+
+          <form method="POST" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+
+            <div class="d-flex justify-content-center align-items-center mb-3">
+              <button
+                type="button"
+                class="btn btn-danger"
+                onclick="decreaseQty('{{ product.id }}')"
+              >
+                -
+              </button>
+
+              <input
+                type="number"
+                name="quantity"
+                id="qty{{ product.id }}"
+                value="1"
+                min="1"
+                class="form-control text-center mx-2"
+                style="width: 80px"
+              />
+
+              <button
+                type="button"
+                class="btn btn-success"
+                onclick="increaseQty('{{ product.id }}')"
+              >
+                +
+              </button>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">
+              Add To Cart
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% empty %}
+
+    <h4>No Products Available</h4>
+
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function increaseQty(id) {
+    let qty = document.getElementById("qty" + id);
+
+    qty.value = parseInt(qty.value) + 1;
+  }
+
+  function decreaseQty(id) {
+    let qty = document.getElementById("qty" + id);
+
+    if (parseInt(qty.value) > 1) {
+      qty.value = parseInt(qty.value) - 1;
+    }
+  }
+</script>
+
+{% endblock %}

@@ -1,86 +1,72 @@
-{% extends 'admin_base.html' %}
-
-{% block content %}
+{% extends 'admin_base.html' %} {% block content %}
 
 <div class="card card-dark p-4">
-    <h2 class="mb-4">Add Product</h2>
+  <h2 class="mb-4">Add Product</h2>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {% if form.non_field_errors %}
+    <div class="alert alert-danger mb-3">{{ form.non_field_errors }}</div>
+    {% endif %}
 
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger mb-3">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
+    <div class="mb-3">
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        placeholder="Product Name"
+        value="{{ request.POST.name|default:'' }}"
+      />
 
-        <div class="mb-3">
-            <input
-                type="text"
-                name="name"
-                class="form-control"
-                placeholder="Product Name"
-                value="{{ request.POST.name|default:'' }}"
-            >
+      {% for error in form.name.errors %}
+      <div class="text-danger mt-1">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-            {% for error in form.name.errors %}
-                <div class="text-danger mt-1">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </div>
+    <div class="mb-3">
+      <input
+        type="file"
+        name="image"
+        class="form-control"
+        accept=".jpg,.jpeg,.png"
+      />
 
-        <div class="mb-3">
-            <input
-                type="file"
-                name="image"
-                class="form-control"
-                accept=".jpg,.jpeg,.png"
-            >
+      {% for error in form.image.errors %}
+      <div class="text-danger mt-1">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-            {% for error in form.image.errors %}
-                <div class="text-danger mt-1">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </div>
+    <div class="mb-3">
+      <textarea
+        name="description"
+        class="form-control"
+        rows="5"
+        placeholder="Description"
+      >
+{{ request.POST.description|default:'' }}</textarea
+      >
 
-        <div class="mb-3">
-            <textarea
-                name="description"
-                class="form-control"
-                rows="5"
-                placeholder="Description"
-            >{{ request.POST.description|default:'' }}</textarea>
+      {% for error in form.description.errors %}
+      <div class="text-danger mt-1">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-            {% for error in form.description.errors %}
-                <div class="text-danger mt-1">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </div>
+    <div class="mb-3">
+      <input
+        type="number"
+        min="1"
+        name="price"
+        class="form-control"
+        placeholder="Price"
+        value="{{ request.POST.price|default:'' }}"
+      />
 
-        <div class="mb-3">
-            <input
-                type="number"
-                step="0.01"
-                name="price"
-                class="form-control"
-                placeholder="Price"
-                value="{{ request.POST.price|default:'' }}"
-            >
+      {% for error in form.price.errors %}
+      <div class="text-danger mt-1">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-            {% for error in form.price.errors %}
-                <div class="text-danger mt-1">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <button type="submit" class="btn btn-success">
-            Save Product
-        </button>
-    </form>
+    <button type="submit" class="btn btn-success">Save Product</button>
+  </form>
 </div>
 
 {% endblock %}

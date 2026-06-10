@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Product, Order
-from .forms import ProductForm
+from .forms import ProductForm, EditProductForm
 
 
 def admin_login(request):
@@ -66,14 +66,16 @@ def edit_product(request, id):
 
     if request.method == "POST":
 
-        form = ProductForm(request.POST, request.FILES, instance=product)
+        form = EditProductForm(request.POST, request.FILES, instance=product)
 
         if form.is_valid():
             form.save()
             return redirect("products")
 
+        print(form.errors)
+
     else:
-        form = ProductForm(instance=product)
+        form = EditProductForm(instance=product)
 
     return render(request, "edit_product.html", {"form": form, "product": product})
 

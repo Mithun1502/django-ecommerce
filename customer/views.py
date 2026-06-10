@@ -5,8 +5,8 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from custom_admin.models import Product
 from .forms import RegisterForm, LoginForm, CheckoutForm
-from custom_admin.models import Product
-from .models import UserProfile, Order
+from custom_admin.models import Product, Order
+from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -19,14 +19,6 @@ def viewproduct(request):
     products = Product.objects.all()
     return render(request, "viewproduct.html", {"products": products})
 
-
-def login(request):
-    return render(request, "login.html")
-    if user:
-        auth_login(request, user)
-        return redirect("home")
-    else:
-        messages.error(request, "Invalid Username or Password")
 
 
 def register(request):
@@ -153,10 +145,9 @@ def checkout(request):
                 Order.objects.create(
                     customer_name=customer_name,
                     customer_email=customer_email,
-                    mobile=mobile,
-                    product_name=product.name,
+                    product=product,
                     quantity=quantity,
-                    total=total,
+                    total_price=total,
                 )
 
             request.session["cart"] = {}

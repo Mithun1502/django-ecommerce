@@ -15,7 +15,7 @@ class RegisterForm(forms.Form):
 
     email = forms.EmailField(
         widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "Enter Email"}
+            attrs={"class": "form-control", "placeholder": "Enter email"}
         )
     )
 
@@ -41,7 +41,7 @@ class RegisterForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get("username", "").strip()
 
-        if not re.fullmatch(r"[A-Za-z ]+", username):
+        if not re.fullmatch(r"[A-Za-z]+", username):
             raise forms.ValidationError("Username can contain only letters and spaces")
 
         if User.objects.filter(username=username).exists():
@@ -68,6 +68,8 @@ class RegisterForm(forms.Form):
 
         if UserProfile.objects.filter(mobile=mobile).exists():
             raise forms.ValidationError("Mobile number already exists")
+        if not mobile.startswith(("7", "8", "9")):
+            raise forms.ValidationError("Mobile number must start with 7, 8, or 9.")
 
         return mobile
 
@@ -133,14 +135,16 @@ class CheckoutForm(forms.Form):
 
     def clean_mobile(self):
         mobile = self.cleaned_data.get("mobile")
+        if not mobile.isdigit():
+            raise forms.ValidationError("Mobile number must contain only digits")
 
         if len(mobile) != 10:
-            raise forms.ValidationError("Mobile number must be 10 digits.")
+            raise forms.ValidationError("Mobile number must be exactly 10 digits")
+
+        if UserProfile.objects.filter(mobile=mobile).exists():
+            raise forms.ValidationError("Mobile number already exists")
 
         if not mobile.startswith(("7", "8", "9")):
-                raise forms.ValidationError(
-                    "Mobile number must start with 7, 8, or 9."
-                )
+            raise forms.ValidationError("Mobile number must start with 7, 8, or 9.")
 
         return mobile
-       

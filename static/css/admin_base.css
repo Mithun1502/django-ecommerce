@@ -2,21 +2,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Segoe UI", sans-serif;
 }
 
 body {
     background: #0f172a;
     color: #fff;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .sidebar {
     width: 260px;
     height: 100vh;
     position: fixed;
-    left: 0;
     top: 0;
+    left: 0;
     background: #111827;
     padding: 30px 20px;
     border-right: 1px solid #1f2937;
@@ -37,7 +38,7 @@ body {
     padding: 14px 18px;
     margin-bottom: 10px;
     border-radius: 10px;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .sidebar a:hover {
@@ -48,33 +49,97 @@ body {
 
 .main-content {
     margin-left: 260px;
+    width: calc(100% - 260px);
     padding: 30px;
-}
-
-.login-page {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    margin-left: 0;
 }
 
 .card-dark {
     background: #1e293b;
-    border: none;
-    border-radius: 16px;
+    border: 1px solid #334155;
+    border-radius: 18px;
     color: #fff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
-    transition: .3s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+    max-width: 700px;
+    margin: auto;
 }
 
 .card-dark:hover {
     transform: translateY(-5px);
 }
 
+.card-dark h2 {
+    color: #f8fafc;
+    font-weight: 700;
+}
+
+.card-dark .form-control {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.card-dark .form-control:focus {
+    background: #fff;
+    color: #15044c;
+    border-color: #3b82f6;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.card-dark .form-control::placeholder {
+    color: #94a3b8;
+}
+
+.card-dark textarea {
+    resize: none;
+}
+
+.card-dark input[type="file"] {
+    color: #cbd5e1;
+}
+
+.edit-product-card {
+    max-width: 800px;
+    margin: auto;
+}
+
+.current-product-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid #334155;
+    margin-top: 10px;
+}
+
+.edit-product-card .form-label {
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.edit-product-card h1 {
+    color: #38bdf8;
+    font-weight: 700;
+}
+
 .card {
     border-radius: 16px !important;
+}
+
+.card-img-top {
+    border-radius: 16px 16px 0 0;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-body p {
+    color: #cbd5e1;
 }
 
 h1,
@@ -92,12 +157,13 @@ h5 {
 }
 
 .btn-success {
-    background: #22c55e;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
     border: none;
 }
 
-.btn-success:hover .btn-warning {
-    color: #fff;
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
 }
 
 .btn-primary {
@@ -105,40 +171,17 @@ h5 {
     border: none;
 }
 
-.btn-primary:hover .form-control {
-    background: #0f172a;
-    border: 1px solid #334155;
-    color: #fff;
-    padding: 12px;
-    border-radius: 10px;
-}
-
 .form-control:focus {
-    background: #ffffff;
-    color: #fff;
-    border-color: #38bdf8;
     box-shadow: none;
-    color:navy;
 }
 
-textarea.form-control {
-    resize: none;
-}
-
-.card-img-top {
-    border-radius: 16px 16px 0 0;
-    object-fit: cover;
-}
-
-.card-body {
-    padding: 20px;
-}
-
-.card-body p {
-    color: #cbd5e1;
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
 }
 
 .table {
+    width: 100%;
     border-radius: 12px;
     overflow: hidden;
 }
@@ -151,13 +194,16 @@ textarea.form-control {
     background: #0f172a;
     color: #38bdf8;
     border: none;
+    white-space: nowrap;
 }
 
 .table td {
     vertical-align: middle;
+    white-space: nowrap;
 }
 
-.login-wrapper {
+.login-wrapper,
+.login-page {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -171,13 +217,12 @@ textarea.form-control {
     background: #1e293b;
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .login-card h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #fff;
 }
 
 .product-form {
@@ -189,95 +234,72 @@ textarea.form-control {
 }
 
 .admin_login {
-    background-color: #16a34a;
+    background: #16a34a;
     padding: 10px 18px;
 }
 
 .customer_login {
-    background-color: #2563eb;
+    background: #2563eb;
     padding: 10px 18px;
 }
 
-@media(max-width:992px) {
-
-
+@media (max-width: 992px) {
     .sidebar {
         width: 220px;
     }
 
     .main-content {
         margin-left: 220px;
+        width: calc(100% - 220px);
     }
-
 }
 
-@media(max-width:768px) {
-
+@media (max-width:768px) {
 
     .sidebar {
         width: 100%;
         height: auto;
         position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        display: block;
         padding: 15px;
     }
 
     .sidebar h2 {
-        width: 100%;
-        margin-bottom: 10px;
+        text-align: center;
+        margin-bottom: 15px;
     }
 
     .sidebar a {
-        margin: 0;
-        padding: 10px 15px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 8px;
     }
 
     .main-content {
         margin-left: 0;
-        padding: 20px;
+        width: 100%;
+        padding: 15px;
     }
 
-    .login-page {
-        padding: 20px;
+    .card-dark {
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
     }
 
-    .row>div {
-        margin-bottom: 15px;
-    }
-
-    .table {
-        display: block;
+    .table-responsive {
         overflow-x: auto;
-        white-space: nowrap;
     }
-
-
 }
 
-@media(max-width:576px) {
-
-
+@media (max-width: 576px) {
     .main-content {
-        padding: 15px;
+        padding: 10px;
     }
 
     .login-card {
         padding: 25px;
-    }
-
-    .login-card h2 {
-        font-size: 28px;
-    }
-
-    h1 {
-        font-size: 28px;
-    }
-
-    h2 {
-        font-size: 24px;
     }
 
     .btn {
@@ -295,83 +317,19 @@ textarea.form-control {
     }
 
     .admin_login_buttons {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        flex-direction: column !important;
-        gap: 10px !important;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 }
 
-.card-dark {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    color: #fff;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-
-.card-dark h2 {
-    color: #f8fafc;
-    font-weight: 700;
-}
-
-
-.card-dark .form-control {
-    background: #0f172a;
-    border: 1px solid #334155;
-    color: #fff;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-.card-dark .form-control:focus {
-    background: #ffffff;
-    color: #15044c;
-    border-color: #3b82f6;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-}
-
-
-.card-dark .form-control::placeholder {
-    color: #94a3b8;
-}
-
-
-
-.card-dark textarea {
-    resize: none;
-}
-
-
-.card-dark input[type="file"] {
-    color: #cbd5e1;
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    border: none;
-    border-radius: 10px;
-    padding: 12px 25px;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.btn-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
-}
-
-
-.card-dark {
-    max-width: 700px;
-    margin: auto;
-}
-
-
-@media (max-width:768px) {
-    .card-dark {
-        margin: 15px;
-    }
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
 }

@@ -126,6 +126,11 @@ def checkout(request):
 
     cart = request.session.get("cart", {})
 
+    if not cart:
+        messages.error(request, "Your cart is empty!")
+        return redirect("cart")
+
+
     if request.method == "POST":
 
         form = CheckoutForm(request.POST)

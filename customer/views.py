@@ -17,8 +17,17 @@ def home(request):
 
 def viewproduct(request):
     products = Product.objects.all()
-    return render(request, "viewproduct.html", {"products": products})
+    cart = request.session.get("cart", {})
 
+    for product in products:
+        product.in_cart = str(product.id) in cart
+        product.cart_quantity = cart.get(str(product.id), 1)
+
+    context = {
+        "products": products,
+    }
+
+    return render(request, "viewproduct.html", context)
 
 
 def register(request):
@@ -130,7 +139,6 @@ def checkout(request):
         messages.error(request, "Your cart is empty!")
         return redirect("cart")
 
-
     if request.method == "POST":
 
         form = CheckoutForm(request.POST)
@@ -207,3 +215,18 @@ def decrease_quantity(request, product_id):
     request.session["cart"] = cart
 
     return redirect("cart")
+
+
+
+def remove_from_cart(request, product_id):
+
+    cart = request.session.get("cart", {})
+
+    product_id = str(product_id)
+
+    if product_id in cart:
+        del cart[product_id]
+
+    request.session["cart"] = cart
+
+    return redirect("viewproduct")

@@ -14,6 +14,11 @@ class ProductForm(forms.ModelForm):
                 "Product name can contain only letters and spaces."
             )
 
+        if len(name) > 30:
+            raise forms.ValidationError(
+                'Name cannot be more than 30 characters'
+            )
+
         return name
 
     def clean_image(self):
@@ -34,21 +39,32 @@ class ProductForm(forms.ModelForm):
     def clean_price(self):
         price = self.cleaned_data.get("price")
         if price <= 0:
-            raise forms.ValidationError(
-                "Price must be greater than zero"
-            )
+            raise forms.ValidationError("Price must be greater than zero")
+
+        if price >= 1000000:
+            raise forms.ValidationError("Price cannot be more than 10 lakhs!")
 
         return price
 
     class Meta:
         model = Product
         fields = "__all__"
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "maxlength": "50"
+                }
+            )
+        }
 
 
 class EditProductForm(forms.ModelForm):
 
     name = forms.CharField(
-        required=False, widget=forms.TextInput(attrs={"class": "form-control"})
+        required=False,
+        max_length=30,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     image = forms.ImageField(
@@ -57,11 +73,14 @@ class EditProductForm(forms.ModelForm):
 
     description = forms.CharField(
         required=False,
+        max_length=150,
         widget=forms.Textarea(attrs={"class": "form-control", "rows": 5}),
     )
 
     price = forms.DecimalField(
-        required=False, widget=forms.NumberInput(attrs={"class": "form-control"})
+        required=False,
+        max_digits=10,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
     )
 
     def clean_name(self):

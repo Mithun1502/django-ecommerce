@@ -1,6 +1,9 @@
-{% extends 'admin_base.html' %} {% block content %}
-
-<div class="d-flex justify-content-between">
+{% extends 'admin_base.html' %} {% block content %} {% comment %}
+<a class="btn btn-primary" href="{% url 'view_product_admin' %}">
+  view product</a
+>
+{% endcomment %}
+<div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Products</h2>
 
   <a href="{% url 'add_product' %}" class="btn btn-success"> Add Product </a>
@@ -8,35 +11,47 @@
 
 <hr />
 
-<div class="row">
+<div class="row g-3">
   {% for product in products %}
-
-  <div class="col-md-4 mb-4">
-    <div class="card card-dark h-100">
+  <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+    <div
+      class="card card-dark product-card"
+      onclick="window.location.href='{% url 'view_product_admin' product.id %}'"
+      style="cursor: pointer"
+    >
       {% if product.image %}
       <img
         src="{{ product.image.url }}"
         class="card-img-top"
-        style="height: 250px; object-fit: cover"
+        alt="{{ product.name }}"
       />
       {% endif %}
+      <div class="card-body d-flex flex-column">
+        <h5 class="text-center fs-3">{{ product.name|truncatechars:25 }}</h5>
+        <h4 class="text-danger text-center fw-bold">₹{{ product.price }}</h4>
+        <p class="flex-grow-1 text-center">
+          {{ product.description|truncatechars:50 }}
+        </p>
+        <div class="action-buttons">
+          <a href="{% url 'edit_product' product.id %}" class="btn btn-warning">
+            Edit
+          </a>
 
-      <div class="card-body">
-        <h5>{{ product.name }}</h5>
-
-        <h4 class="text-success">₹{{ product.price }}</h4>
-
-        <p>{{ product.description|truncatewords:15 }}</p>
-
-        <a href="{% url 'edit_product' product.id %}" class="btn btn-warning">
-          Edit
-        </a>
-
-        <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">
-          Delete
-        </a>
+          <a
+            href="{% url 'delete_product' product.id %}"
+            class="btn btn-danger"
+          >
+            Delete
+          </a>
+        </div>
       </div>
     </div>
+  </div>
+
+  {% empty %}
+
+  <div class="col-12">
+    <h4>No Products Available</h4>
   </div>
 
   {% endfor %}

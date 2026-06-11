@@ -13,10 +13,10 @@
         type="text"
         name="name"
         class="form-control"
-        placeholder="Product Name"
+        maxlength="50"
+        placeholder="Product Name (Max: 50 Characters)"
         value="{{ request.POST.name|default:'' }}"
       />
-
       {% for error in form.name.errors %}
       <div class="text-danger mt-1">{{ error }}</div>
       {% endfor %}
@@ -40,7 +40,9 @@
         name="description"
         class="form-control"
         rows="5"
-        placeholder="Description"
+        placeholder="Product description (Max: 250 Characters)"
+        value="{{ request.POST.name|default:'' }}"
+        maxlength=250
       >
 {{ request.POST.description|default:'' }}</textarea
       >

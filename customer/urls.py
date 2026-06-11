@@ -25,4 +25,9 @@ urlpatterns = [
         views.decrease_quantity,
         name="decrease_quantity",
     ),
+    path(
+        "remove-from-cart/<int:product_id>/",
+        views.remove_from_cart,
+        name="remove_from_cart",
+    ),  
 ]

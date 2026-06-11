@@ -31,7 +31,7 @@
           <h4 class="text-success">₹{{ product.price }}</h4>
 
           <form method="POST" action="{% url 'add_to_cart' product.id %}">
-            {% csrf_token %}
+            {% csrf_token %} {% if product.in_cart %}
 
             <div class="d-flex justify-content-center align-items-center mb-3">
               <button
@@ -46,7 +46,7 @@
                 type="number"
                 name="quantity"
                 id="qty{{ product.id }}"
-                value="1"
+                value="{{ product.cart_quantity }}"
                 min="1"
                 class="form-control text-center mx-2"
                 style="width: 80px"
@@ -61,9 +61,13 @@
               </button>
             </div>
 
+            {% else %}
+
             <button type="submit" class="btn btn-success w-100">
               Add To Cart
             </button>
+
+            {% endif %}
           </form>
         </div>
       </div>
@@ -89,6 +93,8 @@
 
     if (parseInt(qty.value) > 1) {
       qty.value = parseInt(qty.value) - 1;
+    } else {
+      window.location.href = "/remove-from-cart/" + id + "/";
     }
   }
 </script>

@@ -1,8 +1,8 @@
 {% extends 'admin_base.html' %} {% block login_content %}
 
 <div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card p-4 shadow" style="width: 400px">
-    <h2 class="text-center mb-4">Admin Login</h2>
+  <div class="card p-4 shadow admin-login-card" style="width: 400px">
+    <h2 class="text-center text-white mb-4">Admin Login</h2>
 
     <form method="POST">
       {% csrf_token %}
@@ -27,9 +27,13 @@
         />
       </div>
 
-      <div class="admin_login_buttons d-flex justify-content-center align-items-center gap-5">
+      <div
+        class="admin_login_buttons d-flex justify-content-center align-items-center gap-2 "
+      >
         <button type="submit" class="btn btn-info admin_login">Login</button>
-        <a href="{% url 'home' %}" class="btn btn-danger customer_login">Customer? Login here!</a>
+        <a href="{% url 'home' %}" class="btn btn-danger customer_login"
+          >Customer? Login here!</a
+        >
       </div>
     </form>
   </div>

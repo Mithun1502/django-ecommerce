@@ -2,9 +2,9 @@ from django.db import models
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=50, null=False)
     image = models.ImageField(upload_to="products/")
-    description = models.TextField()
+    description = models.CharField(max_length=250, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):

@@ -108,3 +108,10 @@ def admin_logout(request):
         del request.session["admin_logged_in"]
 
     return redirect("admin_login")
+
+
+def view_product_admin(request, id):
+
+    product = Product.objects.get(id=id)
+
+    return render(request, "view_product_admin.html", {"product": product})

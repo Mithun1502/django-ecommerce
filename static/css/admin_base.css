@@ -488,7 +488,6 @@ input[type="number"] {
     word-break: break-word;
 }
 
-/* TABLET */
 
 @media (max-width: 991px) {
 
@@ -501,7 +500,6 @@ input[type="number"] {
     }
 }
 
-/* MOBILE */
 
 @media (max-width: 767px) {
 
@@ -530,7 +528,7 @@ input[type="number"] {
     }
 }
 
-/* SMALL MOBILE */
+
 
 @media (max-width: 575px) {
 
@@ -616,7 +614,7 @@ input[type="file"]::file-selector-button:hover {
         width: 100%;
         background: #000000;
         padding: 10px;
-        border-radius: 15px;    
+        border-radius: 15px;
         box-shadow: 0 0 10px whitesmoke;
     }
 

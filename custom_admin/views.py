@@ -15,7 +15,7 @@ def admin_login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        print(username, password)
+        # print(username, password)
 
         user = authenticate(
             request,
@@ -23,7 +23,7 @@ def admin_login(request):
             password=password
         )
 
-        print("USER =", user)
+        # print("USER =", user)
 
         if user is not None:
             login(request, user)

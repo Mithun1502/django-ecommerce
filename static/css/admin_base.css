@@ -549,7 +549,7 @@ input[type="number"] {
 
 input[type="file"] {
     background: #0f172a;
-    - color: white;
+    color: white;
     border: 1px solid #334155;
     border-radius: 10px;
     padding: 10px;

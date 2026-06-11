@@ -3,19 +3,31 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Product, Order, Seller
 from .forms import ProductForm, EditProductForm
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 
 def admin_login(request):
+
+    print("METHOD:", request.method)
 
     if request.method == "POST":
 
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        user = authenticate(request, username=username, password=password)
+        print(username, password)
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        print("USER =", user)
 
         if user is not None:
             login(request, user)
+            print("LOGIN SUCCESS")
             return redirect("dashboard")
 
     return render(request, "admin_login.html")

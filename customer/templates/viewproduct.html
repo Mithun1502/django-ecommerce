@@ -29,6 +29,10 @@
 
           <h4 class="text-success product-price">₹{{ product.price }}</h4>
 
+          <div class="seller-box">
+            <h6>Sold By</h6>
+            <p>{{ product.seller.shop_name }}</p>
+          </div>
           <form method="POST" action="{% url 'add_to_cart' product.id %}">
             {% csrf_token %} {% if product.in_cart %}
 
@@ -49,7 +53,6 @@
                 min="1"
                 class="form-control text-center qty-input"
               />
-
               <button
                 type="button"
                 class="btn btn-success"

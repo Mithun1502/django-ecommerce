@@ -5,7 +5,6 @@
 <div class="register-container">
     <div class="register-card">
         <h2>Register</h2>
-
         <form method="POST">
             {% csrf_token %}
 
@@ -14,6 +13,7 @@
                     {{ form.non_field_errors }}
                 </div>
             {% endif %}
+            
 
             <div class="mb-3">
                 {{ form.username.label_tag }}

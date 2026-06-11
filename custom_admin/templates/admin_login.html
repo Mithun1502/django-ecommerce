@@ -110,10 +110,10 @@ document.addEventListener("DOMContentLoaded", function () {
             showError(username, "Username must be at least 3 characters.");
             valid = false;
         }
-        else if (!/^[a-zA-Z0-9_]+$/.test(usernameValue)) {
+        else if (!/^[a-zA-Z_]+$/.test(usernameValue)) {
             showError(
                 username,
-                "Only letters, numbers and underscore are allowed."
+                "Only letters and underscore are allowed."
             );
             valid = false;
         }

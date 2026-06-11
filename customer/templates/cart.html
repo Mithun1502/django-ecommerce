@@ -50,14 +50,15 @@
 
   <h3>Grand Total : ₹{{ grand_total }}</h3>
 
-
   {% if cart_items %}
   <a href="{% url 'checkout' %}" class="btn btn-primary">
     Proceed To Checkout
   </a>
   {% else %}
   <p class="text-danger mt-3">Your cart is empty.</p>
+  <a href="{% url 'viewproduct' %}" class="btn btn-info text-center text-white"
+    >View Products</a
+  >
   {% endif %}
 </div>
-
-{% endblock %}
+`` {% endblock %}

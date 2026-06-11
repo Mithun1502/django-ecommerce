@@ -15,32 +15,38 @@ body {
 .admin-login-card {
     background-color: rgba(243, 243, 243, 0.102);
 }
-@media (max-width:1025px) and (min-width:768px){
-    .admin-login-card{
+
+@media (max-width:1025px) and (min-width:768px) {
+    .admin-login-card {
         box-shadow: 0 0 15px whitesmoke;
         width: 500px !important;
-        height:500px !important;
+        height: 500px !important;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    .admin-login-card h2{
+
+    .admin-login-card h2 {
         font-size: 60px;
     }
-    .admin-login-card .form-control{
-        width:360px !important;
-        height:50px !important;
+
+    .admin-login-card .form-control {
+        width: 360px !important;
+        height: 50px !important;
     }
-    .admin_login_buttons{
-        gap:50px !important;
+
+    .admin_login_buttons {
+        gap: 50px !important;
         margin-top: 50px;
     }
 }
-@media(max-width:576px){
-    .admin-login-card{
+
+@media(max-width:576px) {
+    .admin-login-card {
         margin: 0 25px !important;
     }
 }
+
 .sidebar {
     width: 260px;
     height: 100vh;
@@ -105,15 +111,15 @@ body {
 
 .card-dark .form-control {
     background: #011032;
-    border: 5px solid #1c1a1a;
+    border: 2px solid #1c1a1a;
     color: #fff;
     padding: 12px;
     border-radius: 10px;
 }
 
 .card-dark .form-control:focus {
-    background: #fff;
-    color: #15044c;
+    background: #000328 !important;
+    color: #ffffff !important;
     border-color: #3b82f6;
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
 }
@@ -208,6 +214,7 @@ h5 {
 
 .form-control:focus {
     box-shadow: none;
+    border: 2px black !important;
 }
 
 .table-responsive {
@@ -270,9 +277,11 @@ h5 {
     color: whitesmoke;
     border: 1px solid rgba(59, 130, 246, 0.25);
 }
-.admin-login-card .form-control::placeholder{
-    color:whitesmoke;
+
+.admin-login-card .form-control::placeholder {
+    color: whitesmoke;
 }
+
 .product-form button {
     width: 100%;
 }
@@ -605,8 +614,10 @@ input[type="file"]::file-selector-button:hover {
         top: 65px;
         left: 0;
         width: 100%;
-        background: #111827;
+        background: #000000;
         padding: 10px;
+        border-radius: 15px;    
+        box-shadow: 0 0 10px whitesmoke;
     }
 
     .mobile-menu.show {

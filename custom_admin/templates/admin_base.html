@@ -21,7 +21,7 @@
 
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-      <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu text-center" id="mobileMenu">
         <a href="{% url 'dashboard' %}">Dashboard</a>
         <a href="{% url 'products' %}">Products</a>
         <a href="{% url 'add_product' %}">Add Product</a>
@@ -40,7 +40,6 @@
       <a href="{% url 'admin_logout' %}">Logout</a>
     </div>
 
-
     <div class="main-content">{% block content %} {% endblock %}</div>
 
     {% else %}
@@ -53,6 +52,18 @@
       function toggleMenu() {
         document.getElementById("mobileMenu").classList.toggle("show");
       }
+      function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("show");
+      }
+
+      document.addEventListener("click", function (event) {
+        const menu = document.getElementById("mobileMenu");
+        const toggleBtn = document.querySelector(".menu-toggle");
+
+        if (!menu.contains(event.target) && !toggleBtn.contains(event.target)) {
+          menu.classList.remove("show");
+        }
+      });
     </script>
   </body>
 </html>

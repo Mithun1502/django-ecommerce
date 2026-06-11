@@ -12,28 +12,27 @@
   <div class="row">
     {% for product in products %}
 
-    <div class="col-md-4 mb-4">
-      <div class="card shadow h-100">
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card product-card shadow">
         {% if product.image %}
         <img
           src="{{ product.image.url }}"
           class="card-img-top"
           alt="{{ product.name }}"
-          style="height: 200px; object-fit: contain"
         />
         {% endif %}
 
         <div class="card-body">
-          <h5>{{ product.name }}</h5>
+          <h5 class="product-title">{{ product.name }}</h5>
 
-          <p>{{ product.description }}</p>
+          <p class="product-description">{{ product.description }}</p>
 
-          <h4 class="text-success">₹{{ product.price }}</h4>
+          <h4 class="text-success product-price">₹{{ product.price }}</h4>
 
           <form method="POST" action="{% url 'add_to_cart' product.id %}">
             {% csrf_token %} {% if product.in_cart %}
 
-            <div class="d-flex justify-content-center align-items-center mb-3">
+            <div class="d-flex justify-content-center align-items-center gap-2">
               <button
                 type="button"
                 class="btn btn-danger"
@@ -48,8 +47,7 @@
                 id="qty{{ product.id }}"
                 value="{{ product.cart_quantity }}"
                 min="1"
-                class="form-control text-center mx-2"
-                style="width: 80px"
+                class="form-control text-center qty-input"
               />
 
               <button
@@ -84,7 +82,6 @@
 <script>
   function increaseQty(id) {
     let qty = document.getElementById("qty" + id);
-
     qty.value = parseInt(qty.value) + 1;
   }
 

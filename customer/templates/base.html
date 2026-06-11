@@ -54,7 +54,7 @@
             {% if user.is_authenticated %}
 
             <li class="nav-item ms-3">
-              <span class="welcome-user"> Welcome {{ user.username }} </span>
+              <span class="btn btn-warning"> Welcome {{ user.username }}</span>
             </li>
 
             <li class="nav-item ms-2">
@@ -115,5 +115,21 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("click", function (event) {
+        const navbarCollapse = document.getElementById("navbarNav");
+        const navbarToggler = document.querySelector(".navbar-toggler");
+
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+
+        if (
+          navbarCollapse.classList.contains("show") &&
+          !navbarCollapse.contains(event.target) &&
+          !navbarToggler.contains(event.target)
+        ) {
+          bsCollapse.hide();
+        }
+      });
+    </script>
   </body>
 </html>

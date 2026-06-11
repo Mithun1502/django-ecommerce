@@ -1,0 +1,159 @@
+{% extends 'admin_base.html' %} {% block login_content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow admin-login-card" style="width: 400px">
+    <h2 class="text-center text-white mb-4">Seller Registration</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" id="sellerRegisterForm">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <input
+          type="text"
+          name="shop_name"
+          class="form-control"
+          placeholder="Shop Name"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          placeholder="Username"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="Password"
+          required
+        />
+      </div>
+
+      <button class="btn btn-success w-100">Register Seller</button>
+    </form>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("sellerRegisterForm");
+
+    const shopName = document.querySelector('input[name="shop_name"]');
+    const username = document.querySelector('input[name="username"]');
+    const password = document.querySelector('input[name="password"]');
+
+    function removeError(input) {
+      input.classList.remove("is-invalid");
+
+      const error = input.parentElement.querySelector(".error-message");
+      if (error) {
+        error.remove();
+      }
+    }
+
+    function showError(input, message) {
+      removeError(input);
+
+      input.classList.add("is-invalid");
+
+      const error = document.createElement("div");
+      error.className = "text-danger mt-1 small error-message";
+      error.innerText = message;
+
+      input.parentElement.appendChild(error);
+    }
+
+    shopName.addEventListener("input", () => {
+      removeError(shopName);
+    });
+
+    username.addEventListener("input", () => {
+      removeError(username);
+    });
+
+    password.addEventListener("input", () => {
+      removeError(password);
+    });
+
+    form.addEventListener("submit", (e) => {
+      let valid = true;
+
+      removeError(shopName);
+      removeError(username);
+      removeError(password);
+
+      const shopValue = shopName.value.trim();
+      const userValue = username.value.trim();
+      const passValue = password.value;
+      if (shopValue === "") {
+        showError(shopName, "Shop name is required");
+        valid = false;
+      } else if (shopValue.length < 3) {
+        showError(shopName, "Shop name must be at least 3 characters");
+        valid = false;
+      }
+
+      if (userValue === "") {
+        showError(username, "Username is required");
+        valid = false;
+      } else if (userValue.length < 4) {
+        showError(username, "Username must be at least 4 characters");
+        valid = false;
+      } else if (userValue.length > 20) {
+        showError(username, "Username cannot exceed 20 characters");
+        valid = false;
+      } else if (!/^[a-zA-Z_]+$/.test(userValue)) {
+        showError(username, "Only letters and underscore (_) allowed");
+        valid = false;
+      } else if (/\d/.test(userValue)) {
+        showError(username, "Numbers cannot be used in username!");
+        valid = false;
+      }
+
+      if (passValue === "") {
+        showError(password, "Password is required");
+        valid = false;
+      } else if (passValue.length < 8) {
+        showError(password, "Password must be at least 8 characters");
+        valid = false;
+      } else if (!/[A-Z]/.test(passValue)) {
+        showError(
+          password,
+          "Password must contain at least one uppercase letter",
+        );
+        valid = false;
+      } else if (!/[a-z]/.test(passValue)) {
+        showError(
+          password,
+          "Password must contain at least one lowercase letter",
+        );
+        valid = false;
+      } else if (!/[0-9]/.test(passValue)) {
+        showError(password, "Password must contain at least one number");
+        valid = false;
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(passValue)) {
+        showError(
+          password,
+          "Password must contain at least one special character",
+        );
+        valid = false;
+      }
+
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+{% endblock %}

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/admin_base.css' %}" />
   </head>
   <body>
-    {% if request.session.admin_logged_in %}
+    {% if request.user.is_authenticated %}
 
     <nav class="mobile-navbar">
       <div class="mobile-logo">ADMIN</div>
@@ -31,7 +31,7 @@
     </nav>
 
     <div class="sidebar">
-      <h2>ADMIN</h2>
+      <h2>Multi Vendor Panel</h2>
 
       <a href="{% url 'dashboard' %}">Dashboard</a>
       <a href="{% url 'products' %}">Products</a>

@@ -274,7 +274,7 @@ input[type="number"] {
     }
 }
 */
-@media (max-width:991px) {
+@media (max-width:992px) {
 
     .navbar {
         position: relative;
@@ -326,7 +326,7 @@ input[type="number"] {
     }
 }
 
-@media (max-width:990px) and (min-width:768px) {
+@media (max-width:992px) and (min-width:768px) {
     .navbar-nav {
         text-align: center;
         display: flex;

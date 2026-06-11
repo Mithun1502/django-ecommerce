@@ -640,3 +640,12 @@ input[type="file"]::file-selector-button:hover {
         padding: 15px;
     }
 }
+
+.is-invalid {
+    border: 2px solid #dc3545 !important;
+    box-shadow: none !important;
+}
+
+.error-message {
+    font-size: 13px;
+}

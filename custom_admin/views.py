@@ -1,16 +1,21 @@
 from django.shortcuts import render, redirect
-from .models import Product, Order
+from django.contrib.auth import authenticate, login, logout
+from .models import Product, Order, Seller
 from .forms import ProductForm, EditProductForm
+from django.contrib.auth.models import User
 
 
 def admin_login(request):
+
     if request.method == "POST":
 
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        if username == "admin" and password == "1234":
-            request.session["admin_logged_in"] = True
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
             return redirect("dashboard")
 
     return render(request, "admin_login.html")
@@ -18,10 +23,10 @@ def admin_login(request):
 
 def dashboard(request):
 
-    if not request.session.get("admin_logged_in"):
+    if not request.user.is_authenticated:
         return redirect("admin_login")
 
-    total_products = Product.objects.count()
+    total_products = Product.objects.filter(seller=request.user.seller).count()
 
     context = {"total_products": total_products}
 
@@ -30,17 +35,17 @@ def dashboard(request):
 
 def products(request):
 
-    if not request.session.get("admin_logged_in"):
+    if not request.user.is_authenticated:
         return redirect("admin_login")
 
-    products = Product.objects.all()
+    products = Product.objects.filter(seller=request.user.seller)
 
     return render(request, "products.html", {"products": products})
 
 
 def add_product(request):
 
-    if not request.session.get("admin_logged_in"):
+    if not request.user.is_authenticated:
         return redirect("admin_login")
 
     if request.method == "POST":
@@ -48,7 +53,13 @@ def add_product(request):
         form = ProductForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save()
+
+            product = form.save(commit=False)
+
+            product.seller = request.user.seller
+
+            product.save()
+
             return redirect("products")
 
     else:
@@ -59,10 +70,10 @@ def add_product(request):
 
 def edit_product(request, id):
 
-    if not request.session.get("admin_logged_in"):
+    if not request.user.is_authenticated:
         return redirect("admin_login")
 
-    product = Product.objects.get(id=id)
+    product = Product.objects.get(id=id, seller=request.user.seller)
 
     if request.method == "POST":
 
@@ -82,10 +93,10 @@ def edit_product(request, id):
 
 def delete_product(request, id):
 
-    if not request.session.get("admin_logged_in"):
+    if not request.user.is_authenticated:
         return redirect("admin_login")
 
-    product = Product.objects.get(id=id)
+    product = Product.objects.get(id=id, seller=request.user.seller)
 
     product.delete()
 
@@ -94,24 +105,48 @@ def delete_product(request, id):
 
 def orders(request):
 
-    if not request.session.get("admin_logged_in"):
+    if not request.user.is_authenticated:
         return redirect("admin_login")
 
-    all_orders = Order.objects.all().order_by("-created_at")
+    all_orders = Order.objects.filter(product__seller=request.user.seller).order_by(
+        "-created_at"
+    )
 
     return render(request, "orders.html", {"orders": all_orders})
 
 
 def admin_logout(request):
-
-    if "admin_logged_in" in request.session:
-        del request.session["admin_logged_in"]
-
+    logout(request)
     return redirect("admin_login")
 
 
 def view_product_admin(request, id):
 
-    product = Product.objects.get(id=id)
+    if not request.user.is_authenticated:
+        return redirect("admin_login")
+
+    product = Product.objects.get(id=id, seller=request.user.seller)
 
     return render(request, "view_product_admin.html", {"product": product})
+
+
+def seller_register(request):
+
+    if request.method == "POST":
+
+        shop_name = request.POST.get("shop_name")
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        if User.objects.filter(username=username).exists():
+            return render(
+                request, "seller_register.html", {"error": "Username already exists"}
+            )
+
+        user = User.objects.create_user(username=username, password=password)
+
+        Seller.objects.create(user=user, shop_name=shop_name)
+
+        return redirect("admin_login")
+
+    return render(request, "seller_register.html")

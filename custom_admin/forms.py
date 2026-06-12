@@ -41,7 +41,7 @@ class ProductForm(forms.ModelForm):
         if price <= 0:
             raise forms.ValidationError("Price must be greater than zero")
 
-        if price >= 1000000:
+        if price >= 999999:
             raise forms.ValidationError("Price cannot be more than 10 lakhs!")
 
         return price

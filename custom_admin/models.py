@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator
 
 
 class Seller(models.Model):
@@ -18,7 +19,9 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     image = models.ImageField(upload_to="products/")
     description = models.CharField(max_length=250)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MaxValueValidator(9999999999)]
+    )
 
     def __str__(self):
         return self.name

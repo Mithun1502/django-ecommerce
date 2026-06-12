@@ -18,22 +18,26 @@
       <td>{{ item.product.name }}</td>
       <td>₹{{ item.product.price }}</td>
       <td>
-        <div class="incredecre">
-          <a
-            href="{% url 'decrease_quantity' item.product.id %}"
-            class="btn btn-sm btn-danger"
-          >
-            -
-          </a>
-          <span class="mx-2">{{ item.quantity }}</span>
-          <a
-            href="{% url 'increase_quantity' item.product.id %}"
-            class="btn btn-sm btn-success"
-          >
-            +
-          </a>
-        </div>
-      </td>
+  <div class="incredecre">
+    <button
+      class="btn btn-sm btn-danger decrease-btn"
+      data-id="{{ item.product.id }}"
+    >
+      -
+    </button>
+
+    <span class="mx-2 qty-{{ item.product.id }}">
+      {{ item.quantity }}
+    </span>
+
+    <button
+      class="btn btn-sm btn-success increase-btn"
+      data-id="{{ item.product.id }}"
+    >
+      +
+    </button>
+  </div>
+</td>
       <td>₹{{ item.total }}</td>
       <td>
         <a
@@ -61,4 +65,55 @@
   >
   {% endif %}
 </div>
-`` {% endblock %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".increase-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const productId = button.dataset.id;
+
+      fetch(`/increase/${productId}/`)
+      .then(response => response.json())
+      .then(data => {
+
+        if (data.success) {
+
+          document.querySelector(`.qty-${productId}`).textContent =
+            data.quantity;
+
+          location.reload();
+        }
+
+      });
+
+    });
+
+  });
+
+  document.querySelectorAll(".decrease-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const productId = button.dataset.id;
+
+      fetch(`/decrease/${productId}/`)
+      .then(response => response.json())
+      .then(data => {
+
+        if (data.success) {
+
+          location.reload();
+
+        }
+
+      });
+
+    });
+
+  });
+
+});
+</script>
+ {% endblock %}

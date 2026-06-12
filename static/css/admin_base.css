@@ -422,8 +422,8 @@ input[type="number"] {
 }
 
 .product-card h5 {
-    height: 60px;
-    overflow: hidden;
+    height: 75px;
+    overflow: visible;
     margin-bottom: 10px;
 }
 

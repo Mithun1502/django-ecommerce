@@ -42,7 +42,7 @@
         rows="5"
         placeholder="Product description (Max: 250 Characters)"
         value="{{ request.POST.name|default:'' }}"
-        maxlength=250
+        maxlength="250"
       >
 {{ request.POST.description|default:'' }}</textarea
       >
@@ -60,6 +60,7 @@
         class="form-control"
         placeholder="Price"
         value="{{ request.POST.price|default:'' }}"
+        maxlength="10"
       />
 
       {% for error in form.price.errors %}

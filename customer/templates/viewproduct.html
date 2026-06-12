@@ -33,42 +33,52 @@
             <h6>Sold By</h6>
             <p>{{ product.seller.shop_name }}</p>
           </div>
-          <form method="POST" action="{% url 'add_to_cart' product.id %}">
-            {% csrf_token %} {% if product.in_cart %}
+          <form>
+            {% csrf_token %}
 
-            <div class="d-flex justify-content-center align-items-center gap-2">
+            <div id="cart-controls-{{ product.id }}">
+              {% if product.in_cart %}
+
+              <div
+                class="d-flex justify-content-center align-items-center gap-2"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  onclick="decreaseQty('{{ product.id }}')"
+                >
+                  -
+                </button>
+
+                <input
+                  type="number"
+                  id="qty{{ product.id }}"
+                  value="{{ product.cart_quantity }}"
+                  class="form-control text-center qty-input"
+                  readonly
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  onclick="increaseQty('{{ product.id }}')"
+                >
+                  +
+                </button>
+              </div>
+
+              {% else %}
+
               <button
                 type="button"
-                class="btn btn-danger"
-                onclick="decreaseQty('{{ product.id }}')"
+                class="btn btn-success w-100"
+                onclick="addToCart('{{ product.id }}')"
               >
-                -
+                Add To Cart
               </button>
 
-              <input
-                type="number"
-                name="quantity"
-                id="qty{{ product.id }}"
-                value="{{ product.cart_quantity }}"
-                min="1"
-                class="form-control text-center qty-input"
-              />
-              <button
-                type="button"
-                class="btn btn-success"
-                onclick="increaseQty('{{ product.id }}')"
-              >
-                +
-              </button>
+              {% endif %}
             </div>
-
-            {% else %}
-
-            <button type="submit" class="btn btn-success w-100">
-              Add To Cart
-            </button>
-
-            {% endif %}
           </form>
         </div>
       </div>
@@ -83,20 +93,77 @@
 </div>
 
 <script>
-  function increaseQty(id) {
-    let qty = document.getElementById("qty" + id);
-    qty.value = parseInt(qty.value) + 1;
+  function getCSRFToken() {
+    return document.querySelector("[name=csrfmiddlewaretoken]").value;
   }
 
-  function decreaseQty(id) {
-    let qty = document.getElementById("qty" + id);
+  async function addToCart(id) {
+    const response = await fetch(`/add-to-cart/${id}/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCSRFToken(),
+      },
+    });
 
-    if (parseInt(qty.value) > 1) {
-      qty.value = parseInt(qty.value) - 1;
+    const data = await response.json();
+
+    document.getElementById(`cart-controls-${id}`).innerHTML = `
+      <div class="d-flex justify-content-center align-items-center gap-2">
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          onclick="decreaseQty('${id}')"
+        >
+          -
+        </button>
+
+        <input
+          type="number"
+          id="qty${id}"
+          value="${data.quantity}"
+          class="form-control text-center qty-input"
+          readonly
+        />
+
+        <button
+          type="button"
+          class="btn btn-success"
+          onclick="increaseQty('${id}')"
+        >
+          +
+        </button>
+
+      </div>
+    `;
+  }
+
+  async function increaseQty(id) {
+    const response = await fetch(`/increase/${id}/`);
+
+    const data = await response.json();
+
+    document.getElementById(`qty${id}`).value = data.quantity;
+  }
+
+  async function decreaseQty(id) {
+    const response = await fetch(`/decrease/${id}/`);
+
+    const data = await response.json();
+
+    if (data.removed) {
+      document.getElementById(`cart-controls-${id}`).innerHTML = `
+        <button
+          type="button"
+          class="btn btn-success w-100"
+          onclick="addToCart('${id}')"
+        >
+          Add To Cart
+        </button>
+      `;
     } else {
-      window.location.href = "/remove-from-cart/" + id + "/";
+      document.getElementById(`qty${id}`).value = data.quantity;
     }
   }
 </script>
-
 {% endblock %}

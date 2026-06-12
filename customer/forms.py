@@ -41,8 +41,8 @@ class RegisterForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get("username", "").strip()
 
-        if not re.fullmatch(r"[A-Za-z]+", username):
-            raise forms.ValidationError("Username can contain only letters and spaces")
+        if not re.fullmatch(r"[A-Za-z_]+", username):
+            raise forms.ValidationError("Username can contain only letters and Underscores")
 
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Username already exists")

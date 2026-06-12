@@ -9,6 +9,7 @@ from custom_admin.models import Product, Order
 from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 
 def home(request):
@@ -93,19 +94,16 @@ def logout(request):
 def add_to_cart(request, product_id):
 
     cart = request.session.get("cart", {})
-
     product_id = str(product_id)
 
-    quantity = int(request.POST.get("quantity", 1))
-
     if product_id in cart:
-        cart[product_id] += quantity
+        cart[product_id] += 1
     else:
-        cart[product_id] = quantity
+        cart[product_id] = 1
 
     request.session["cart"] = cart
 
-    return redirect("viewproduct")
+    return JsonResponse({"success": True, "quantity": cart[product_id]})
 
 
 def cart(request):
@@ -194,10 +192,11 @@ def increase_quantity(request, product_id):
 
     if product_id in cart:
         cart[product_id] += 1
+        request.session["cart"] = cart
 
-    request.session["cart"] = cart
+        return JsonResponse({"success": True, "quantity": cart[product_id]})
 
-    return redirect("cart")
+    return JsonResponse({"success": False})
 
 
 def decrease_quantity(request, product_id):
@@ -208,14 +207,24 @@ def decrease_quantity(request, product_id):
     if product_id in cart:
 
         if cart[product_id] > 1:
+
             cart[product_id] -= 1
+
+            request.session["cart"] = cart
+
+            return JsonResponse(
+                {"success": True, "quantity": cart[product_id], "removed": False}
+            )
+
         else:
+
             del cart[product_id]
 
-    request.session["cart"] = cart
+            request.session["cart"] = cart
 
-    return redirect("cart")
+            return JsonResponse({"success": True, "removed": True})
 
+    return JsonResponse({"success": False})
 
 
 def remove_from_cart(request, product_id):

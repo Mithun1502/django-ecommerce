@@ -8,9 +8,9 @@ class UserProfile(models.Model):
 
     mobile = models.CharField(max_length=10, unique=True)
 
+  
     def __str__(self):
         return self.user.username
-
 
 # class Order(models.Model):
 #     customer_name = models.CharField(max_length=100)

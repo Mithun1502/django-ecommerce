@@ -10,6 +10,7 @@ from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from custom_admin.models import Order
 
 
 def home(request):
@@ -141,27 +142,28 @@ def checkout(request):
 
         if form.is_valid():
 
-            customer_name = form.cleaned_data["username"]
-            customer_email = form.cleaned_data["email"]
-            customer_mobile = form.cleaned_data["mobile"]
+            address = form.cleaned_data["address"]
 
             for product_id, quantity in cart.items():
 
                 product = Product.objects.get(id=product_id)
 
                 total = product.price * quantity
-                mobile = request.POST.get("mobile")
+
                 Order.objects.create(
-                    customer_name=customer_name,
-                    customer_email=customer_email,
+                    customer_name=request.user.username,
+                    customer_email=request.user.email,
                     product=product,
                     quantity=quantity,
                     total_price=total,
+                    address=address,
                 )
 
             request.session["cart"] = {}
 
-            return redirect("viewproduct")
+            messages.success(request, "Order placed successfully!")
+
+            return redirect("customer_orders")
 
     else:
         form = CheckoutForm()
@@ -237,3 +239,20 @@ def remove_from_cart(request, product_id):
     request.session["cart"] = cart
 
     return redirect("viewproduct")
+
+
+from custom_admin.models import Order
+
+
+@login_required(login_url="login")
+def customer_orders(request):
+
+    orders = Order.objects.filter(customer_email=request.user.email).order_by(
+        "-created_at"
+    )
+
+    return render(
+        request,
+        "customer_orders.html",
+        {"orders": orders},
+    )

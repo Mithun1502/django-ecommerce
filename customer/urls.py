@@ -29,5 +29,10 @@ urlpatterns = [
         "remove-from-cart/<int:product_id>/",
         views.remove_from_cart,
         name="remove_from_cart",
-    ),  
+    ),
+    path(
+        "customer_orders/",
+        views.customer_orders,
+        name="customer_orders",
+    ),
 ]

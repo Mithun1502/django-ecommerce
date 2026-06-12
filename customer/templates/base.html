@@ -53,10 +53,11 @@
 
             {% if user.is_authenticated %}
 
-            <li class="nav-item ms-3">
-              <span class="btn btn-warning"> Welcome {{ user.username }}</span>
+            <li class="nav-item ms-2">
+              <a href="{% url 'customer_orders' %}" class="btn btn-success">
+                Orders
+              </a>
             </li>
-
             <li class="nav-item ms-2">
               <a href="{% url 'logout' %}" class="btn btn-danger"> Logout </a>
             </li>

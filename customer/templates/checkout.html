@@ -3,25 +3,25 @@
 <div class="container mt-5">
   <h2 class="mb-4">Checkout</h2>
 
-  <form method="POST">
-    {% csrf_token %}
-
+  <form method="POST" class="checkout-form">
+    {% csrf_token %} {% comment %}
     <div class="mb-3">
       <label>Username</label>
       {{ form.username }} {% if form.username.errors %}
       <div class="text-danger">{{ form.username.errors }}</div>
       {% endif %}
     </div>
+    {% endcomment %}
 
     <div class="mb-3">
-      <label>Email</label>
+      <label>Email:</label>
       {{ form.email }} {% if form.email.errors %}
       <div class="text-danger">{{ form.email.errors }}</div>
       {% endif %}
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Mobile Number</label>
+      <label class="form-label">Mobile Number:</label>
 
       <div class="input-group">
         <span class="input-group-text">+91</span>
@@ -32,41 +32,51 @@
       <div class="text-danger">{{ form.mobile.errors }}</div>
       {% endif %}
     </div>
+
+    <div class="mb-3">
+      <label>Address:</label>
+      {{ form.address }} {% if form.address.errors %}
+      <div class="text-danger">{{ form.address.errors }}</div>
+      {% endif %}
+    </div>
+
     <button type="submit" id="placeOrderBtn" class="btn btn-secondary" disabled>
       Place Order
     </button>
   </form>
 </div>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const username = document.getElementById("id_username");
+  document.addEventListener("DOMContentLoaded", function () {
+    //    const username = document.getElementById("id_username");
     const email = document.getElementById("id_email");
     const mobile = document.getElementById("id_mobile");
+    const address = document.getElementById("id_address");
     const button = document.getElementById("placeOrderBtn");
 
     function validateForm() {
+      //  const usernameValid = username.value.trim() !== "";
+      const emailValid = email.value.trim() !== "";
+      const mobileValid = mobile.value.trim().length === 10;
+      const addressValid =
+        address.value.trim().length >= 5 && address.value.trim() !== "";
 
-        const usernameValid = username.value.trim() !== "";
-        const emailValid = email.value.trim() !== "";
-        const mobileValid = mobile.value.trim().length === 10;
-
-        if (usernameValid && emailValid && mobileValid) {
-            button.disabled = false;
-            button.classList.remove("btn-secondary");
-            button.classList.add("btn-success");
-        } else {
-            button.disabled = true;
-            button.classList.remove("btn-success");
-            button.classList.add("btn-secondary");
-        }
+      if (addressValid && emailValid && mobileValid) {
+        button.disabled = false;
+        button.classList.remove("btn-secondary");
+        button.classList.add("btn-success");
+      } else {
+        button.disabled = true;
+        button.classList.remove("btn-success");
+        button.classList.add("btn-secondary");
+      }
     }
 
-    username.addEventListener("input", validateForm);
+    //username.addEventListener("input", validateForm);
     email.addEventListener("input", validateForm);
     mobile.addEventListener("input", validateForm);
+    address.addEventListener("input", validateForm);
 
     validateForm();
-});
+  });
 </script>
 {% endblock %}

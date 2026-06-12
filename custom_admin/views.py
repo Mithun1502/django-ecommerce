@@ -181,3 +181,16 @@ def seller_register(request):
         return redirect("admin_login")
 
     return render(request, "seller_register.html")
+
+
+def update_order_status(request, order_id):
+
+    if request.method == "POST":
+
+        order = Order.objects.get(id=order_id)
+
+        order.status = request.POST.get("status")
+
+        order.save()
+
+    return redirect("orders")

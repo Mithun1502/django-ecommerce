@@ -42,7 +42,9 @@ class RegisterForm(forms.Form):
         username = self.cleaned_data.get("username", "").strip()
 
         if not re.fullmatch(r"[A-Za-z_]+", username):
-            raise forms.ValidationError("Username can contain only letters and Underscores")
+            raise forms.ValidationError(
+                "Username can contain only letters and Underscores"
+            )
 
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Username already exists")
@@ -102,12 +104,13 @@ class LoginForm(forms.Form):
 
 
 class CheckoutForm(forms.Form):
-    username = forms.CharField(
-        max_length=150,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter Username"}
-        ),
-    )
+    # username = forms.CharField(
+    #     max_length=150,
+    #     widget=forms.TextInput(
+    #         attrs={"class": "form-control", "placeholder": "Enter Username"}
+    #     ),
+    # )
+
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={"class": "form-control", "placeholder": "Enter Email"}
@@ -116,17 +119,28 @@ class CheckoutForm(forms.Form):
     mobile = forms.CharField(
         max_length=10,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Enter Mobile Number"}
+            attrs={"class": "form-control", "placeholder": "Enter Mobile"}
         ),
     )
 
-    def clean_username(self):
-        username = self.cleaned_data.get("username", "").strip()
+    address = forms.CharField(
+        max_length=266,
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter your address (Max 200 Characters)",
+                "rows": 4,
+            }
+        ),
+    )
 
-        if not re.fullmatch(r"[A-Za-z]+", username):
-            raise forms.ValidationError("Username can contain only letters and spaces")
+    # def clean_username(self):
+    #     username = self.cleaned_data.get("username", "").strip()
 
-        return username
+    #     if not re.fullmatch(r"[A-Za-z]+", username):
+    #         raise forms.ValidationError("Username can contain only letters and spaces")
+
+    #     return username
 
     def clean_email(self):
         email = self.cleaned_data.get("email")

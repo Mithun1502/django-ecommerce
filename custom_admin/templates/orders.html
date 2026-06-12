@@ -10,6 +10,7 @@
         <th>Product</th>
         <th>Qty</th>
         <th>Total</th>
+        <th>Status</th>
       </tr>
     </thead>
 
@@ -17,13 +18,70 @@
       {% for order in orders %}
       <tr>
         <td>{{ order.customer_name }}</td>
+
         <td>{{ order.product.name }}</td>
+
         <td>{{ order.quantity }}</td>
+
         <td>₹{{ order.total_price }}</td>
+
+        <td>
+          <form method="POST" action="{% url 'update_order_status' order.id %}">
+            {% csrf_token %}
+
+            <div class="d-flex gap-2">
+              <select name="status" class="form-select form-select-sm">
+                <option
+                  value="Ordered"
+                  {%
+                  if
+                  order.status=""
+                  ="Ordered"
+                  %}selected{%
+                  endif
+                  %}
+                >
+                  Ordered
+                </option>
+
+                <option
+                  value="Shipped"
+                  {%
+                  if
+                  order.status=""
+                  ="Ordered"
+                  %}selected{%
+                  endif
+                  %}
+                >
+                  Shipped
+                </option>
+
+                <option
+                  value="Delivered"
+                  {%
+                  if
+                  order.status=""
+                  ="Ordered"
+                  %}selected{%
+                  endif
+                  %}
+                >
+                  Delivered
+                </option>
+              </select>
+
+              <button type="submit" class="btn btn-success btn-sm">
+                Update
+              </button>
+            </div>
+          </form>
+        </td>
       </tr>
+
       {% empty %}
       <tr>
-        <td colspan="4" class="text-center">No Orders Found</td>
+        <td colspan="5" class="text-center">No Orders Found</td>
       </tr>
       {% endfor %}
     </tbody>

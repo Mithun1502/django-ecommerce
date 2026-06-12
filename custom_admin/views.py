@@ -4,6 +4,7 @@ from .models import Product, Order, Seller
 from .forms import ProductForm, EditProductForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 def admin_login(request):
@@ -31,21 +32,32 @@ def admin_login(request):
     return render(request, "admin_login.html")
 
 
-def dashboard(request):
+def seller_required(view_func):
+    def wrapper(request, *args, **kwargs):
 
-    if not request.user.is_authenticated:
-        return redirect("admin_login")
+        if not request.user.is_authenticated:
+            return redirect("admin_login")
+
+        if not hasattr(request.user, "seller"):
+            return redirect("admin_login")
+
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
+
+@login_required(login_url="admin_login")
+def dashboard(request):
 
     if not hasattr(request.user, "seller"):
         return redirect("admin_login")
 
     total_products = Product.objects.filter(seller=request.user.seller).count()
 
-    context = {"total_products": total_products}
-
-    return render(request, "dashboard.html", context)
+    return render(request, "dashboard.html", {"total_products": total_products})
 
 
+@seller_required
 def products(request):
 
     if not request.user.is_authenticated:
@@ -59,6 +71,7 @@ def products(request):
     return render(request, "products.html", {"products": products})
 
 
+@seller_required
 def add_product(request):
 
     if not request.user.is_authenticated:
@@ -87,6 +100,7 @@ def add_product(request):
     return render(request, "add_product.html", {"form": form})
 
 
+@seller_required
 def edit_product(request, id):
 
     if not request.user.is_authenticated:
@@ -113,6 +127,7 @@ def edit_product(request, id):
     return render(request, "edit_product.html", {"form": form, "product": product})
 
 
+@seller_required
 def delete_product(request, id):
 
     if not request.user.is_authenticated:
@@ -128,6 +143,7 @@ def delete_product(request, id):
     return redirect("products")
 
 
+@seller_required
 def orders(request):
 
     if not request.user.is_authenticated:
@@ -148,6 +164,7 @@ def admin_logout(request):
     return redirect("admin_login")
 
 
+@seller_required
 def view_product_admin(request, id):
 
     if not request.user.is_authenticated:
@@ -161,6 +178,7 @@ def view_product_admin(request, id):
     return render(request, "view_product_admin.html", {"product": product})
 
 
+@seller_required
 def seller_register(request):
 
     if request.method == "POST":
@@ -183,6 +201,7 @@ def seller_register(request):
     return render(request, "seller_register.html")
 
 
+@seller_required
 def update_order_status(request, order_id):
 
     if request.method == "POST":

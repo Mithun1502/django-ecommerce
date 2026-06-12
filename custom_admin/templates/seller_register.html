@@ -46,108 +46,142 @@
   </div>
 </div>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("sellerRegisterForm");
 
     const shopName = document.querySelector('input[name="shop_name"]');
     const username = document.querySelector('input[name="username"]');
     const password = document.querySelector('input[name="password"]');
 
-    function removeError(input) {
-      input.classList.remove("is-invalid");
-
-      const error = input.parentElement.querySelector(".error-message");
-      if (error) {
-        error.remove();
-      }
-    }
-
-    function showError(input, message) {
-      removeError(input);
-
-      input.classList.add("is-invalid");
-
-      const error = document.createElement("div");
-      error.className = "text-danger mt-1 small error-message";
-      error.innerText = message;
-
-      input.parentElement.appendChild(error);
-    }
-
-    shopName.addEventListener("input", () => {
-      removeError(shopName);
-    });
-
-    username.addEventListener("input", () => {
-      removeError(username);
-    });
-
-    password.addEventListener("input", () => {
-      removeError(password);
-    });
-
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", function (e) {
       let valid = true;
 
-      removeError(shopName);
-      removeError(username);
-      removeError(password);
+      // Remove old errors konjam kastama teriyum .error-message nu namma kudutha ellam
+      // remove aairum at first then recheck pannum!
+      document.querySelectorAll(".error-message").forEach(function (error) {
+        error.remove();
+      });
+      //inga paaru remove aairum
+      shopName.classList.remove("is-invalid");
+      username.classList.remove("is-invalid");
+      password.classList.remove("is-invalid");
 
-      const shopValue = shopName.value.trim();
-      const userValue = username.value.trim();
-      const passValue = password.value;
-      if (shopValue === "") {
-        showError(shopName, "Shop name is required");
+      // Shop Name validate pandrom
+      //empty na div create aagum elathukume apdi dha
+      if (shopName.value.trim() === "") {
         valid = false;
-      } else if (shopValue.length < 3) {
-        showError(shopName, "Shop name must be at least 3 characters");
+        shopName.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Shop name is required";
+
+        shopName.parentElement.appendChild(error);
+      } else if (shopName.value.trim().length < 3) {
         valid = false;
+        shopName.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Shop name must be at least 3 characters";
+
+        shopName.parentElement.appendChild(error);
       }
 
-      if (userValue === "") {
-        showError(username, "Username is required");
+      // Username Validation
+      if (username.value.trim() === "") {
         valid = false;
-      } else if (userValue.length < 4) {
-        showError(username, "Username must be at least 4 characters");
+        username.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Username is required";
+
+        username.parentElement.appendChild(error);
+      } else if (username.value.trim().length < 4) {
         valid = false;
-      } else if (userValue.length > 20) {
-        showError(username, "Username cannot exceed 20 characters");
+        username.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Username must be at least 4 characters";
+
+        username.parentElement.appendChild(error);
+      } else if (username.value.trim().length > 20) {
         valid = false;
-      } else if (!/^[a-zA-Z_]+$/.test(userValue)) {
-        showError(username, "Only letters and underscore (_) allowed");
+        username.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Username cannot exceed 20 characters";
+
+        username.parentElement.appendChild(error);
+      } else if (!/^[a-zA-Z_]+$/.test(username.value.trim())) {
         valid = false;
-      } else if (/\d/.test(userValue)) {
-        showError(username, "Numbers cannot be used in username!");
-        valid = false;
+        username.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Only letters and underscore (_) allowed";
+
+        username.parentElement.appendChild(error);
       }
 
-      if (passValue === "") {
-        showError(password, "Password is required");
+      // Password Validation
+      if (password.value === "") {
         valid = false;
-      } else if (passValue.length < 8) {
-        showError(password, "Password must be at least 8 characters");
+        password.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Password is required";
+
+        password.parentElement.appendChild(error);
+      } else if (password.value.length < 8) {
         valid = false;
-      } else if (!/[A-Z]/.test(passValue)) {
-        showError(
-          password,
-          "Password must contain at least one uppercase letter",
-        );
+        password.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Password must be at least 8 characters";
+
+        password.parentElement.appendChild(error);
+      } else if (!/[A-Z]/.test(password.value)) {
         valid = false;
-      } else if (!/[a-z]/.test(passValue)) {
-        showError(
-          password,
-          "Password must contain at least one lowercase letter",
-        );
+        password.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Password must contain uppercase letter";
+
+        password.parentElement.appendChild(error);
+      } else if (!/[a-z]/.test(password.value)) {
         valid = false;
-      } else if (!/[0-9]/.test(passValue)) {
-        showError(password, "Password must contain at least one number");
+        password.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Password must contain lowercase letter";
+
+        password.parentElement.appendChild(error);
+      } else if (!/[0-9]/.test(password.value)) {
         valid = false;
-      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(passValue)) {
-        showError(
-          password,
-          "Password must contain at least one special character",
-        );
+        password.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Password must contain a number";
+
+        password.parentElement.appendChild(error);
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password.value)) {
         valid = false;
+        password.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = "Password must contain special character";
+
+        password.parentElement.appendChild(error);
       }
 
       if (!valid) {

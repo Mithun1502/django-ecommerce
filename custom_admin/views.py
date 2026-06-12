@@ -8,26 +8,24 @@ from django.http import HttpResponse
 
 def admin_login(request):
 
-    print("METHOD:", request.method)
-
     if request.method == "POST":
 
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        # print(username, password)
-
-        user = authenticate(
-            request,
-            username=username,
-            password=password
-        )
-
-        # print("USER =", user)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
+
+            if not hasattr(user, "seller"):
+                return render(
+                    request,
+                    "admin_login.html",
+                    {"error": "This is not a seller account"},
+                )
+
             login(request, user)
-            print("LOGIN SUCCESS")
+
             return redirect("dashboard")
 
     return render(request, "admin_login.html")
@@ -36,6 +34,9 @@ def admin_login(request):
 def dashboard(request):
 
     if not request.user.is_authenticated:
+        return redirect("admin_login")
+
+    if not hasattr(request.user, "seller"):
         return redirect("admin_login")
 
     total_products = Product.objects.filter(seller=request.user.seller).count()
@@ -50,6 +51,9 @@ def products(request):
     if not request.user.is_authenticated:
         return redirect("admin_login")
 
+    if not hasattr(request.user, "seller"):
+        return redirect("admin_login")
+
     products = Product.objects.filter(seller=request.user.seller)
 
     return render(request, "products.html", {"products": products})
@@ -58,6 +62,9 @@ def products(request):
 def add_product(request):
 
     if not request.user.is_authenticated:
+        return redirect("admin_login")
+
+    if not hasattr(request.user, "seller"):
         return redirect("admin_login")
 
     if request.method == "POST":
@@ -85,6 +92,9 @@ def edit_product(request, id):
     if not request.user.is_authenticated:
         return redirect("admin_login")
 
+    if not hasattr(request.user, "seller"):
+        return redirect("admin_login")
+
     product = Product.objects.get(id=id, seller=request.user.seller)
 
     if request.method == "POST":
@@ -108,6 +118,9 @@ def delete_product(request, id):
     if not request.user.is_authenticated:
         return redirect("admin_login")
 
+    if not hasattr(request.user, "seller"):
+        return redirect("admin_login")
+
     product = Product.objects.get(id=id, seller=request.user.seller)
 
     product.delete()
@@ -118,6 +131,9 @@ def delete_product(request, id):
 def orders(request):
 
     if not request.user.is_authenticated:
+        return redirect("admin_login")
+
+    if not hasattr(request.user, "seller"):
         return redirect("admin_login")
 
     all_orders = Order.objects.filter(product__seller=request.user.seller).order_by(
@@ -135,6 +151,9 @@ def admin_logout(request):
 def view_product_admin(request, id):
 
     if not request.user.is_authenticated:
+        return redirect("admin_login")
+
+    if not hasattr(request.user, "seller"):
         return redirect("admin_login")
 
     product = Product.objects.get(id=id, seller=request.user.seller)

@@ -70,17 +70,15 @@ def login(request):
 
             if user:
 
+                if hasattr(user, "seller"):
+                    form.add_error(None, "Please login through seller portal")
+                    return render(request, "login.html", {"form": form})
+
                 auth_login(request, user)
-
-                next_url = request.GET.get("next")
-
-                if next_url:
-                    return redirect(next_url)
 
                 return redirect("home")
 
     else:
-
         form = LoginForm()
 
     return render(request, "login.html", {"form": form})

@@ -7,14 +7,17 @@
         <div class="card-header text-center">
           <h3>Edit Profile</h3>
         </div>
-
         <div class="card-body">
           <form method="POST">
             {% csrf_token %} {{ form.as_p }}
-
-            <button type="submit" class="btn btn-success w-100">
-              Update Profile
-            </button>
+            <div class="profile-buttons d-flex justify-space-between">
+              <button type="submit" class="btn btn-success w-50">
+                Update Profile
+              </button>
+              <a href="{% url 'profile' %}" class="btn btn-primary w-50 mt-4"
+                >Cancel</a
+              >
+            </div>
           </form>
         </div>
       </div>

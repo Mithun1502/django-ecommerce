@@ -3,10 +3,12 @@
 <div class="container main-container px-5">
   <div class="container-left pt-5">
     {% if user.is_authenticated and not user.seller %}
-
-    <div class="alert alert-primary text-center w-50 welcome_username">
-      Welcome {{ user.username }}
-    </div>
+<div class="rough-wrap">
+  
+      <div class="alert alert-primary text-center w-50 welcome_username">
+        Welcome {{ user.username }}
+      </div>
+</div>
 
     {% endif %}
 

@@ -178,7 +178,7 @@ def view_product_admin(request, id):
     return render(request, "view_product_admin.html", {"product": product})
 
 
-@seller_required
+
 def seller_register(request):
 
     if request.method == "POST":

@@ -850,10 +850,17 @@ input[type="file"]::file-selector-button:hover {
     }
 
     .admin-login-card h2 {
-        font-size: 40px;
+        font-size: 30px;
+        font-weight: 700;
     }
 
     .admin-login-card .form-control {
         width: 250px !important;
     }
+}
+@media (max-width:230px) {
+    input[type="file"]{
+      width:100%;
+    }
+    
 }

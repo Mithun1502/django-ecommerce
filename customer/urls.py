@@ -35,4 +35,5 @@ urlpatterns = [
         views.customer_orders,
         name="customer_orders",
     ),
+    path("profile/", views.profile, name="profile"),
 ]

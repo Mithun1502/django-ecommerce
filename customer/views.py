@@ -256,3 +256,10 @@ def customer_orders(request):
         "customer_orders.html",
         {"orders": orders},
     )
+
+
+@login_required(login_url="login")
+def profile(request):
+    profile = UserProfile.objects.get(user=request.user)
+
+    return render(request, "profile.html", {"profile": profile})

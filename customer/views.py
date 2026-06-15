@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from custom_admin.models import Order
+from .forms import EditProfileForm
 
 
 def home(request):
@@ -144,8 +145,11 @@ def checkout(request):
 
             address = form.cleaned_data["address"]
 
-            for product_id, quantity in cart.items():
+            profile = UserProfile.objects.get(user=request.user)
+            profile.address = address
+            profile.save()
 
+            for product_id, quantity in cart.items():
                 product = Product.objects.get(id=product_id)
 
                 total = product.price * quantity
@@ -158,7 +162,6 @@ def checkout(request):
                     total_price=total,
                     address=address,
                 )
-
             request.session["cart"] = {}
 
             messages.success(request, "Order placed successfully!")
@@ -263,3 +266,42 @@ def profile(request):
     profile = UserProfile.objects.get(user=request.user)
 
     return render(request, "profile.html", {"profile": profile})
+
+
+
+@login_required(login_url="login")
+def customer_editprofile(request):
+
+    profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == "POST":
+
+        form = EditProfileForm(request.POST, user=request.user)
+
+        if form.is_valid():
+
+            request.user.username = form.cleaned_data["username"]
+            request.user.email = form.cleaned_data["email"]
+            request.user.save()
+
+            profile.mobile = form.cleaned_data["mobile"]
+            profile.address = form.cleaned_data["address"]
+            profile.save()
+
+            messages.success(request, "Profile updated successfully")
+
+            return redirect("profile")
+
+    else:
+
+        form = EditProfileForm(
+            user=request.user,
+            initial={
+                "username": request.user.username,
+                "email": request.user.email,
+                "mobile": profile.mobile,
+                "address": profile.address,
+            },
+        )
+
+    return render(request, "customer_editprofile.html", {"form": form})

@@ -36,4 +36,5 @@ urlpatterns = [
         name="customer_orders",
     ),
     path("profile/", views.profile, name="profile"),
+    path("edit-profile/", views.customer_editprofile, name="customer_editprofile"),
 ]

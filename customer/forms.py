@@ -162,3 +162,49 @@ class CheckoutForm(forms.Form):
             raise forms.ValidationError("Mobile number must start with 7, 8, or 9.")
 
         return mobile
+
+
+class EditProfileForm(forms.Form):
+
+    username = forms.CharField(
+        max_length=150, widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
+
+    mobile = forms.CharField(
+        max_length=10, widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    address = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+    )
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+
+        if User.objects.exclude(id=self.user.id).filter(username=username).exists():
+            raise forms.ValidationError("Username already exists")
+
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+
+        if User.objects.exclude(id=self.user.id).filter(email=email).exists():
+            raise forms.ValidationError("Email already exists")
+
+        return email
+
+    def clean_mobile(self):
+        mobile = self.cleaned_data["mobile"]
+
+        if UserProfile.objects.exclude(user=self.user).filter(mobile=mobile).exists():
+            raise forms.ValidationError("Mobile already exists")
+
+        return mobile

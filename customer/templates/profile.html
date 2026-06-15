@@ -1,27 +1,40 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container">
-  <div class="row">
-    <div class="col-12 text-center text-success">
-      <h1 class="fw-bold">User Details</h1>
-    </div>
-    {% comment %}
-    <div class="col-12">
-      <div class="text-end">
-        <a href="{% url 'home' %}" class="btn btn-danger text-white"
-          >Return to Home</a
-        >
-      </div>
-    </div>
-    {% endcomment %}
-    <div
-      class="col-12 d-flex justify-content-center align-items-center flex-column"
-    >
-      <div class="name-container">
-        <p class="username">Name: {{user.username}}</p>
-        <p class="email">Email: {{user.email}}</p>
-        <p class="mobile">Mobile: {{ user.userprofile.mobile }}</p>
-        
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="profile-card text-dark">
+        <h2 class="text-center mb-4">User Details</h2>
+        <div class="image-row text-center">
+          <span class="image-row username">
+            {{user.username|first|upper}}
+          </span>
+        </div>
+        <div class="detail-row">
+          <span>Name</span>
+          <span>{{ user.username }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span>Email</span>
+          <span>{{ user.email }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span>Mobile</span>
+          <span>{{ user.userprofile.mobile }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span>Address : </span>
+          <span>{{ user.userprofile.address|truncatechars:25 }}</span>
+        </div>
+
+        <div class="text-end mt-4">
+          <a href="{% url 'customer_editprofile' %}" class="btn btn-primary">
+            Edit Profile
+          </a>
+        </div>
       </div>
     </div>
   </div>

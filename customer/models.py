@@ -8,7 +8,7 @@ class UserProfile(models.Model):
 
     mobile = models.CharField(max_length=10, unique=True)
 
-  
+    address = models.TextField(max_length=266, blank=True, null=True)
     def __str__(self):
         return self.user.username
 

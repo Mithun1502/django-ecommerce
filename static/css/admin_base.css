@@ -768,7 +768,7 @@ input[type="file"]::file-selector-button:hover {
     }
 }
 
-/* 360px - 181px */
+
 @media (max-width:360px) and (min-width:181px) {
 
     .register-card {
@@ -802,7 +802,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 
-/* 180px and below */
+
 @media (max-width:180px) {
 
     .register-card {
@@ -846,7 +846,7 @@ input[type="file"]::file-selector-button:hover {
     .admin-login-card {
         width: 300px !important;
         overflow: hidden;
-        padding:10px 0;
+        padding: 10px 0;
     }
 
     .admin-login-card h2 {
@@ -858,9 +858,16 @@ input[type="file"]::file-selector-button:hover {
         width: 250px !important;
     }
 }
+
 @media (max-width:230px) {
-    input[type="file"]{
-      width:100%;
+    input[type="file"] {
+        width: 100%;
     }
-    
+
+}
+
+@media (max-width:285px) and (min-width:150px) {
+    .mobile-logo {
+        font-size: 20px !important;
+    }
 }

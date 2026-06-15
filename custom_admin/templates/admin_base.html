@@ -17,7 +17,7 @@
     {% if request.user.is_authenticated %}
 
     <nav class="mobile-navbar">
-      <div class="mobile-logo">ADMIN</div>
+      <span class="mobile-logo">ADMIN</span>
 
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
@@ -49,9 +49,7 @@
     {% endif %}
 
     <script>
-      function toggleMenu() {
-        document.getElementById("mobileMenu").classList.toggle("show");
-      }
+
       function toggleMenu() {
         document.getElementById("mobileMenu").classList.toggle("show");
       }

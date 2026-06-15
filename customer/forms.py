@@ -129,7 +129,7 @@ class CheckoutForm(forms.Form):
             attrs={
                 "class": "form-control",
                 "placeholder": "Enter your address (Max 200 Characters)",
-                "rows": 4,
+                "rows": 5,
             }
         ),
     )

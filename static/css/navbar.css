@@ -8,7 +8,17 @@ body {
     background: #000;
     color: #fff;
     font-family: Segoe UI, sans-serif;
-    min-height: 100vh
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    background: #090000 !important;
 }
 
 .navbar {
@@ -132,7 +142,7 @@ body {
 
 footer {
     background: #050505;
-    margin-top: 60px
+    margin-top: 60px;
 }
 
 .btn-primary,
@@ -321,9 +331,9 @@ input[type="number"] {
     }
 }
 
-@media (max-width:405px) {
-    .incredecre a {
-        display: none;
+@media (max-width:503px) {
+    .incredecre button{
+        display: none !important;
     }
 }
 
@@ -386,6 +396,25 @@ input[type="number"] {
 }
 
 textarea {
-    height: 70px;
+    height: 150px;
     resize: none;
+}
+
+@media (max-width:768px) and (min-width:200px) {
+    .welcome-user {
+        display: none;
+    }
+}
+
+@media (max-width:445px) {
+    .customer_order_table {
+        font-size: 12px !important;
+    }
+
+}
+
+@media (max-width:360px) {
+    .customer_order_table {
+        font-size: 10px !important;
+    }
 }

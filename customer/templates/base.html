@@ -48,12 +48,6 @@
               <a class="nav-link" href="{% url 'checkout' %}"> Checkout </a>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link text-warning" href="{% url 'admin_login' %}">
-                Admin Login
-              </a>
-            </li>
-
             {% if user.is_authenticated %}
 
             <li class="nav-item ms-2">
@@ -74,22 +68,32 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                 <li>
-                  {% comment %} <hr /> {% endcomment %}
+                  <a class="dropdown-item" href="{% url 'profile' %}"
+                    >Profile</a
+                  >
+                </li>
+                <li>
+                  {% comment %}
+                  <hr />
+                  {% endcomment %}
                   <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                 </li>
               </ul>
             </li>
 
             {% else %}
-
+            <li class="nav-item">
+              <a class="nav-link text-warning" href="{% url 'admin_login' %}">
+                Admin Login
+              </a>
+            </li>
             <li class="nav-item ms-2 summa">
-              <a href="{% url 'login' %}" class="btn btn-primary "> Login </a>
+              <a href="{% url 'login' %}" class="btn btn-primary"> Login </a>
             </li>
 
             <li class="nav-item ms-2 summa">
-              <a href="{% url 'register' %}" class="btn btn-success ">
+              <a href="{% url 'register' %}" class="btn btn-success">
                 Register
               </a>
             </li>

@@ -35,6 +35,12 @@ class Order(models.Model):
         ("Delivered", "Delivered"),
     ]
 
+    PAYMENT_CHOICES = [
+        ("Card", "Card"),
+        ("GPay", "GPay"),
+        ("Cash", "Cash"),
+    ]
+
     customer_name = models.CharField(max_length=100)
     customer_email = models.EmailField()
 
@@ -44,11 +50,22 @@ class Order(models.Model):
 
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
+    payment_method = models.CharField(
+        max_length=20, choices=PAYMENT_CHOICES, default="Cash"
+    )
+
+    card_number = models.CharField(max_length=20, blank=True, null=True)
+
+    amount_received = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
+
+    balance = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
+
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Ordered")
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     address = models.CharField(max_length=150, default="wrong address")
-
-    def __str__(self):
-        return self.customer_name

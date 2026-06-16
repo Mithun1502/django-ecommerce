@@ -17,9 +17,9 @@ body {
     flex: 1;
 }
 
-footer {
+/* footer {
     background: #090000 !important;
-}
+} */
 
 .navbar {
     background: #050505;
@@ -148,7 +148,7 @@ footer {
 .btn-primary,
 .btn-success,
 .btn-danger {
-    border-radius: 10px
+    border-radius: 12px;
 }
 
 
@@ -307,7 +307,7 @@ input[type="number"] {
     }
 }
 
-@media (max-width:430px) {
+/* @media (max-width:430px) {
     .incredecre {
         font-size: 12px;
         margin: 0 5px;
@@ -317,25 +317,25 @@ input[type="number"] {
         padding: 10px 6px !important;
         font-size: 8px;
     }
-}
+} */
 
-@media (max-width:424px) {
+/* @media (max-width:424px) {
     .incredecre {
         font-size: 12px;
         margin: 0 3px;
     }
 
     .incredecre a {
-        padding: 10px 3px !important;
+        padding: 2px 3px !important;
         font-size: 5px !important;
     }
-}
+} */
 
-@media (max-width:503px) {
+/* @media (max-width:503px) {
     .incredecre button {
-        display:inline !important;
+        display: inline !important;
     }
-}
+} */
 
 @media (max-width:992px) and (min-width:768px) {
     .navbar-nav {
@@ -527,6 +527,13 @@ textarea {
         gap: 5px;
     }
 
+}
+
+.btn-success,
+.btn-danger,
+.btn-primary {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
 }
 
 @media (max-width: 230px) {
@@ -787,17 +794,17 @@ textarea {
         padding: 2px;
     }
 
-    .incredecre button {
+    /* .incredecre button {
         display: inline-block !important;
         font-size: 8px;
         padding: 2px 5px;
-    }
+    } */
 
     .btn-success,
     .btn-danger,
     .btn-primary {
         font-size: 8px !important;
-        padding: 4px !important;
+        padding: 5px 10px !important;
     }
 
     .register-container {
@@ -853,14 +860,14 @@ textarea {
     .incredecre {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: 2px;
         align-items: center;
     }
 
-    .incredecre button {
+    /* .incredecre button {
         font-size: 8px !important;
-        padding: 2px 5px !important;
-    }
+        padding: 2px 2px !important;
+    } */
 
     .container h3 {
         font-size: 12px;
@@ -1075,5 +1082,100 @@ textarea {
 @media (max-width:255px) {
     .welcome_username {
         font-size: 10px;
+    }
+}
+
+.incredecre {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
+.increase-btn,
+.decrease-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.increase-btn,
+.decrease-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    transition: .2s;
+}
+
+.increase-btn {
+    background: #22c55e;
+}
+
+.decrease-btn {
+    background: #ef4444;
+}
+
+.increase-btn:hover,
+.decrease-btn:hover {
+    transform: scale(1.08);
+}
+
+.incredecre span {
+    font-size: 16px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+}
+@media (max-width: 230px){
+
+    .incredecre{
+        display:flex !important;
+        flex-direction:row !important;
+        align-items:center;
+        justify-content:center;
+        gap:4px;
+        flex-wrap:nowrap;
+    }
+
+    .increase-btn,
+    .decrease-btn{
+        width:18px !important;
+        height:18px !important;
+        font-size:12px !important;
+        flex-shrink:0;
+    }
+
+    .incredecre span{
+        font-size:10px !important;
+        min-width:auto;
+    }
+
+    .table{
+        font-size:7px;
+    }
+
+    .table td,
+    .table th{
+        padding:2px;
     }
 }

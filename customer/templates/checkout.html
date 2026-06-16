@@ -1,5 +1,52 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
+<style>
+  input[type="month"] {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #444;
+  }
 
+  input[type="month"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+  input[type="month"],
+  .form-select,
+  .form-control {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+  }
+
+  input[type="month"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+
+  .form-select option {
+    background-color: #1a1a1a;
+    color: white;
+  }
+
+  .form-control::placeholder {
+    color: #cfcfcf53 !important;
+  }
+  .input-group-text {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+  }
+
+  #id_mobile {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+  }
+
+  #id_mobile::placeholder {
+    color: #aaa;
+  }
+</style>
 <div class="container mt-5">
   <h2 class="mb-4">Checkout</h2>
 
@@ -39,8 +86,82 @@
       <div class="text-danger">{{ form.address.errors }}</div>
       {% endif %}
     </div>
+    <div class="mb-3">
+      <label class="form-label">Payment Method</label>
 
-    <button type="submit" id="placeOrderBtn" class="btn btn-secondary text-center w-100" disabled>
+      <select class="form-select" id="payment_method" name="payment_method">
+        <option value="">Select Payment Method</option>
+        <option value="Card">Card</option>
+        <option value="GPay">GPay</option>
+        <option value="Cash">Cash</option>
+      </select>
+    </div>
+    <div id="cardSection" style="display: none">
+      <div class="mb-3">
+        <div class="form-group mb-2">
+          <label class="form-label">Card Number: </label>
+          <input
+            type="text"
+            class="form-control"
+            name="card_number"
+            maxlength="16"
+          />
+        </div>
+        <div class="form-group mb-2">
+          <label for="card_cvv" class="form-label">Security Pin:</label>
+          <input
+            type="number"
+            class="form-control"
+            name="card_cvv"
+            maxlength="3"
+          />
+        </div>
+        <div class="form-group mb-2">
+          <label for="start-month" class="form-label">Expire Date:</label>
+          <input
+            type="month"
+            class="form-control"
+            name="card_exp"
+            min="2025-01"
+            max="2040-12"
+            placeholder="MM/YYYY"
+          />
+        </div>
+      </div>
+    </div>
+    <div id="gpaySection" style="display: none">
+      <div class="gpay-img my-5 d-flex justify-content-center">
+        <img
+          src="{% static 'images/gpayqrcode.png' %}"
+          alt="gpay-image"
+          style="width: 300px; height: 500px"
+        />
+      </div>
+    </div>
+    <div id="cashSection" style="display: none">
+      <div class="mb-3">
+        <label>Amount Received</label>
+
+        <input
+          type="number"
+          class="form-control"
+          id="amountReceived"
+          name="amount_received"
+        />
+      </div>
+
+      <div class="alert alert-success">
+        Total Amount : ₹<span id="totalAmount">{{ grand_total }}</span><br />
+
+        Balance : ₹<span id="balanceAmount">0</span>
+      </div>
+    </div>
+    <button
+      type="submit"
+      id="placeOrderBtn"
+      class="btn btn-secondary text-center w-100"
+      disabled
+    >
       Place Order
     </button>
   </form>
@@ -78,5 +199,42 @@
 
     validateForm();
   });
+</script>
+<script>
+  const paymentMethod = document.getElementById("payment_method");
+
+  const cardSection = document.getElementById("cardSection");
+  const gpaySection = document.getElementById("gpaySection");
+  const cashSection = document.getElementById("cashSection");
+
+  paymentMethod.addEventListener("change", function () {
+    cardSection.style.display = "none";
+    gpaySection.style.display = "none";
+    cashSection.style.display = "none";
+
+    if (this.value === "Card") {
+      cardSection.style.display = "block";
+    }
+
+    if (this.value === "GPay") {
+      gpaySection.style.display = "block";
+    }
+
+    if (this.value === "Cash") {
+      cashSection.style.display = "block";
+    }
+  });
+  const amountReceived = document.getElementById("amountReceived");
+
+  if (amountReceived) {
+    amountReceived.addEventListener("input", function () {
+      const total =
+        parseFloat(document.getElementById("totalAmount").innerText) || 0;
+
+      const received = parseFloat(this.value) || 0;
+
+      document.getElementById("balanceAmount").innerText = received - total;
+    });
+  }
 </script>
 {% endblock %}

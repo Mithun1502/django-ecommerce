@@ -178,7 +178,6 @@ def view_product_admin(request, id):
     return render(request, "view_product_admin.html", {"product": product})
 
 
-
 def seller_register(request):
 
     if request.method == "POST":
@@ -201,15 +200,14 @@ def seller_register(request):
     return render(request, "seller_register.html")
 
 
+
 @seller_required
 def update_order_status(request, order_id):
 
-    if request.method == "POST":
+    order = Order.objects.get(id=order_id)
 
-        order = Order.objects.get(id=order_id)
+    order.status = request.POST.get("status")
 
-        order.status = request.POST.get("status")
+    order.save()
 
-        order.save()
-
-    return redirect("orders")
+    return JsonResponse({"success": True})

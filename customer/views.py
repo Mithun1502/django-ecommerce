@@ -137,6 +137,13 @@ def checkout(request):
         messages.error(request, "Your cart is empty!")
         return redirect("cart")
 
+    # Calculate grand total for checkout page for updating in the cash section da mapla
+    grand_total = 0
+
+    for product_id, quantity in cart.items():
+        product = Product.objects.get(id=product_id)
+        grand_total += product.price * quantity
+
     if request.method == "POST":
 
         form = CheckoutForm(request.POST)
@@ -145,11 +152,23 @@ def checkout(request):
 
             address = form.cleaned_data["address"]
 
+            payment_method = request.POST["payment_method"]
+            card_number = request.POST.get("card_number")
+            amount_received = request.POST.get("amount_received")
+
             profile = UserProfile.objects.get(user=request.user)
             profile.address = address
             profile.save()
 
+            # Calculate balance only once
+            balance = None
+
+            if payment_method == "Cash" and amount_received:
+                balance = float(amount_received) - float(grand_total)
+
+            # Create orders
             for product_id, quantity in cart.items():
+
                 product = Product.objects.get(id=product_id)
 
                 total = product.price * quantity
@@ -161,17 +180,31 @@ def checkout(request):
                     quantity=quantity,
                     total_price=total,
                     address=address,
+                    payment_method=payment_method,
+                    card_number=card_number if payment_method == "Card" else None,
+                    amount_received=(
+                        amount_received if payment_method == "Cash" else None
+                    ),
+                    balance=balance,
                 )
+
+            # Clear cart
             request.session["cart"] = {}
 
             messages.success(request, "Order placed successfully!")
-
             return redirect("customer_orders")
 
     else:
         form = CheckoutForm()
 
-    return render(request, "checkout.html", {"form": form})
+    return render(
+        request,
+        "checkout.html",
+        {
+            "form": form,
+            "grand_total": grand_total,
+        },
+    )
 
 
 def deleteproduct(request, product_id):
@@ -266,7 +299,6 @@ def profile(request):
     profile = UserProfile.objects.get(user=request.user)
 
     return render(request, "profile.html", {"profile": profile})
-
 
 
 @login_required(login_url="login")

@@ -1,22 +1,57 @@
 {% extends 'admin_base.html' %} {% block content %}
 
+<style>
+  .form-select {
+    background-color: #293739 !important;
+    color: #f3f3f3 !important;
+    border: 1px solid #495057 !important;
+    font-weight: 700;
+  }
+
+  .form-select:focus {
+    background-color: #2d333b !important;
+    color: #f3f3f3 !important;
+    border-color: #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .form-select option {
+    background-color: #2d333b !important;
+    color: #f3f3f3 !important;
+    font-weight: 700;
+  }
+
+  .table-dark {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .status-msg {
+    font-size: 12px;
+    color: #00ff88;
+    margin-top: 5px;
+  }
+</style>
+
 <h2 class="mb-4">Orders</h2>
 
 <div class="table-responsive">
-  <table class="table table-dark table-striped">
+  <table class="table table-dark table-striped align-middle">
     <thead>
       <tr>
         <th>Name</th>
         <th>Product</th>
         <th>Qty</th>
         <th>Total</th>
+        <th>Payment</th>
         <th>Status</th>
       </tr>
     </thead>
 
+    ```
     <tbody>
       {% for order in orders %}
-      <tr>
+      <tr id="order-row-{{ order.id }}">
         <td>{{ order.customer_name }}</td>
 
         <td>{{ order.product.name }}</td>
@@ -25,66 +60,57 @@
 
         <td>₹{{ order.total_price }}</td>
 
+        <td>{{ order.payment_method }}</td>
+
         <td>
-          <form method="POST" action="{% url 'update_order_status' order.id %}">
-            {% csrf_token %}
+          <select id="status-{{ order.id }}" class="form-select form-select-sm">
+            <option value="Ordered">Ordered</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+          </select>
 
-            <div class="d-flex gap-2">
-              <select name="status" class="form-select form-select-sm">
-                <option
-                  value="Ordered"
-                  {%
-                  if
-                  order.status=""
-                  ="Ordered"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Ordered
-                </option>
+          <button
+            class="btn btn-success btn-sm mt-2"
+            onclick="updateStatus({{ order.id }})"
+          >
+            Update
+          </button>
 
-                <option
-                  value="Shipped"
-                  {%
-                  if
-                  order.status=""
-                  ="Shipped"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Shipped
-                </option>
-
-                <option
-                  value="Delivered"
-                  {%
-                  if
-                  order.status=""
-                  ="Delivered"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Delivered
-                </option>
-              </select>
-              <button type="submit" class="btn btn-success btn-sm">
-                Update
-              </button>
-            </div>
-          </form>
+          <p id="msg-{{ order.id }}"></p>
         </td>
       </tr>
-
       {% empty %}
       <tr>
-        <td colspan="5" class="text-center">No Orders Found</td>
+        <td colspan="6" class="text-center py-3">No Orders Found</td>
       </tr>
       {% endfor %}
     </tbody>
+    ```
   </table>
 </div>
+
+<script>
+  function updateStatus(orderId) {
+    let status = document.getElementById("status-" + orderId).value;
+
+    fetch("/admin-panel/update-order-status/" + orderId + "/", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+          .value,
+      },
+
+      body: "status=" + status,
+    })
+      .then((response) => response.json())
+
+      .then((data) => {
+        document.getElementById("msg-" + orderId).innerText =
+          "Updated Successfully";
+      });
+  }
+</script>
 
 {% endblock %}

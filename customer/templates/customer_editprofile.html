@@ -10,11 +10,11 @@
         <div class="card-body">
           <form method="POST">
             {% csrf_token %} {{ form.as_p }}
-            <div class="profile-buttons d-flex justify-space-between">
-              <button type="submit" class="btn btn-success w-50">
+            <div class="profile-buttons d-flex justify-content-center gap-5 align-items-center mt-4">
+              <button type="submit" class="btn btn-success" >
                 Update Profile
               </button>
-              <a href="{% url 'profile' %}" class="btn btn-primary w-50 mt-4"
+              <a href="{% url 'profile' %}" class="btn btn-primary"
                 >Cancel</a
               >
             </div>

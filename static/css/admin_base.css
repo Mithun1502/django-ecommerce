@@ -27,7 +27,7 @@ body {
     }
 
     .admin-login-card h2 {
-        font-size:35px;
+        font-size: 35px;
     }
 
     .admin-login-card .form-control {
@@ -270,7 +270,6 @@ h5 {
 .product-form {
     max-width: 800px;
 }
-
 
 .admin-login-card .form-control {
     background-color: #000;
@@ -1160,8 +1159,87 @@ input[type="file"]::file-selector-button:hover {
     }
 }
 
-@media (max-width:275px) and (min-width:170px ) {
-    .admin-login-card{
-        height:auto;
+@media (max-width:275px) and (min-width:170px) {
+    .admin-login-card {
+        height: auto;
+    }
+}
+
+.toast {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+
+.toast-header {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+}
+
+.toast-body {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    word-wrap: break-word;
+}
+
+
+@media (max-width: 576px) {
+    .toast {
+        width: 200px !important;
+        min-width: 200px !important;
+        max-width: 200px !important;
+    }
+
+    .toast-header {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+
+    .toast-body {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+}
+
+
+@media (max-width: 375px) {
+    .toast {
+        width: 180px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
+    }
+
+    .toast-header {
+        font-size: 11px !important;
+    }
+
+    .toast-body {
+        font-size: 10px !important;
+    }
+}
+
+
+@media (max-width: 250px) {
+    .toast {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+
+    .toast-header {
+        padding: 2px 4px !important;
+        font-size: 8px !important;
+    }
+
+    .toast-body {
+        padding: 2px 4px !important;
+        font-size: 10px !important;
+    }
+
+    .toast .btn-close {
+        transform: scale(0.7);
     }
 }

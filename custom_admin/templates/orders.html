@@ -62,10 +62,45 @@
         <td>{{ order.payment_method }}</td>
 
         <td>
+          {% if order.status == "Delivered" %}
+
+          <span class="badge bg-success">Delivered</span>
+
+          {% elif order.status == "Cancelled" %}
+
+          <span class="badge bg-danger">Cancelled</span>
+
+          {% else %}
+
           <select id="status-{{ order.id }}" class="form-select form-select-sm">
-            <option value="Ordered">Ordered</option>
-            <option value="Shipped">Shipped</option>
+            <option
+              value="Ordered"
+              {%
+              if
+              order.status=""
+              ="Ordered"
+              %}selected{%
+              endif
+              %}
+            >
+              Ordered
+            </option>
+
+            <option
+              value="Shipped"
+              {%
+              if
+              order.status=""
+              ="Shipped"
+              %}selected{%
+              endif
+              %}
+            >
+              Shipped
+            </option>
             <option value="Delivered">Delivered</option>
+
+            <option value="Cancelled">Cancelled</option>
           </select>
 
           <button
@@ -75,7 +110,9 @@
             Update
           </button>
 
-          <p id="msg-{{ order.id }}" style="font: size 15px; "></p>
+          {% endif %}
+
+          <p id="msg-{{ order.id }}"></p>
         </td>
       </tr>
       {% empty %}
@@ -86,29 +123,203 @@
     </tbody>
   </table>
 </div>
+<div class="modal fade" id="cancelModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="text-dark">Cancel Order</h5>
+      </div>
 
+      <div class="modal-body text-dark">
+        <textarea
+          id="cancelReason"
+          class="form-control"
+          rows="4"
+          placeholder="Reason for cancellation"
+          style="resize: none"
+        ></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" id="confirmCancelBtn">
+          Confirm Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
+  let selectedOrderId = null;
+
   function updateStatus(orderId) {
     let status = document.getElementById("status-" + orderId).value;
 
+    if (status === "Cancelled") {
+      selectedOrderId = orderId;
+
+      new bootstrap.Modal(document.getElementById("cancelModal")).show();
+
+      return;
+    }
+
+    updateOrder(orderId, status, "");
+  }
+
+  function updateOrder(orderId, status, reason) {
     fetch("/admin-panel/update-order-status/" + orderId + "/", {
       method: "POST",
 
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+
         "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
           .value,
       },
 
-      body: "status=" + status,
+      body:
+        "status=" +
+        encodeURIComponent(status) +
+        "&reason=" +
+        encodeURIComponent(reason),
     })
       .then((response) => response.json())
 
       .then((data) => {
-        document.getElementById("msg-" + orderId).innerText =
-          "Updated Successfully";
+        if (!data.success) {
+          document.getElementById("msg-" + orderId).innerHTML =
+            "<span class='text-danger'>" +
+            (data.message || "Update Failed") +
+            "</span>";
+
+          return;
+        }
+
+        document.getElementById("msg-" + orderId).innerHTML =
+          "<span class='text-success'>Updated Successfully</span>";
+
+        let statusCell = document.querySelector(
+          "#order-row-" + orderId + " td:last-child",
+        );
+
+        if (status === "Delivered") {
+          statusCell.innerHTML =
+            '<span class="badge bg-success">Delivered</span>';
+        } else if (status === "Cancelled") {
+          statusCell.innerHTML =
+            '<span class="badge bg-danger">Cancelled</span>';
+        }
+      })
+
+      .catch((error) => {
+        console.error(error);
+
+        document.getElementById("msg-" + orderId).innerHTML =
+          "<span class='text-danger'>Something went wrong</span>";
       });
   }
-</script>
 
+  document
+    .getElementById("confirmCancelBtn")
+    .addEventListener("click", function () {
+      let reason = document.getElementById("cancelReason").value;
+
+      if (reason.trim() === "") {
+        alert("Please enter cancellation reason");
+
+        return;
+      }
+
+      updateOrder(selectedOrderId, "Cancelled", reason);
+
+      bootstrap.Modal.getInstance(
+        document.getElementById("cancelModal"),
+      ).hide();
+
+      document.getElementById("cancelReason").value = "";
+    });
+</script>
+<script>
+  let latestOrderId = 0;
+
+  function checkNewOrders() {
+    fetch("/seller-order-notifications/")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.orders.length > 0) {
+          let newestOrder = data.orders[0];
+
+          if (latestOrderId !== 0 && newestOrder.id > latestOrderId) {
+            location.reload();
+          }
+
+          latestOrderId = newestOrder.id;
+        }
+      });
+  }
+
+  window.onload = function () {
+    const firstRow = document.querySelector("tbody tr");
+
+    if (firstRow) {
+      latestOrderId = parseInt(firstRow.id.replace("order-row-", ""));
+    }
+
+    setInterval(checkNewOrders, 3000);
+  };
+</script>
+<script>
+  let currentOrderCount = document.querySelectorAll(
+    "tbody tr[id^='order-row-']",
+  ).length;
+
+  function refreshOrdersTable() {
+    fetch("/admin-panel/seller-order-notifications/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.orders.length > currentOrderCount) {
+          location.reload();
+        }
+
+        currentOrderCount = data.orders.length;
+      })
+      .catch((error) => console.log(error));
+  }
+
+  setInterval(refreshOrdersTable, 1000);
+</script>
+<script>
+  function checkStatusUpdates() {
+    fetch("/admin-panel/seller-order-notifications/")
+      .then((response) => response.json())
+      .then((data) => {
+        data.orders.forEach((order) => {
+          let selectBox = document.getElementById("status-" + order.id);
+
+          if (!selectBox) return;
+
+          if (selectBox.value !== order.status) {
+            if (order.status === "Cancelled") {
+              let statusCell = document.querySelector(
+                "#order-row-" + order.id + " td:last-child",
+              );
+
+              statusCell.innerHTML =
+                '<span class="badge bg-danger">Cancelled</span>';
+            }
+
+            if (order.status === "Delivered") {
+              let statusCell = document.querySelector(
+                "#order-row-" + order.id + " td:last-child",
+              );
+
+              statusCell.innerHTML =
+                '<span class="badge bg-success">Delivered</span>';
+            }
+          }
+        });
+      });
+  }
+
+  setInterval(checkStatusUpdates, 1000);
+</script>
 {% endblock %}

@@ -237,9 +237,7 @@
       function checkOrderUpdates() {
         fetch("/check-order-updates/")
           .then((res) => {
-            if (!res.ok) {
-              return;
-            }
+            if (!res.ok) return;
 
             return res.json();
           })
@@ -248,6 +246,24 @@
             if (!data) return;
 
             data.orders.forEach((order) => {
+              let badge = document.getElementById("status-" + order.id);
+
+              if (badge) {
+                badge.innerText = order.status;
+
+                badge.className = "badge";
+
+                if (order.status === "Ordered") {
+                  badge.classList.add("bg-warning", "text-dark");
+                } else if (order.status === "Shipped") {
+                  badge.classList.add("bg-primary");
+                } else if (order.status === "Delivered") {
+                  badge.classList.add("bg-success");
+                } else if (order.status === "Cancelled") {
+                  badge.classList.add("bg-danger");
+                }
+              }
+
               let oldStatus = localStorage.getItem("order_" + order.id);
 
               if (oldStatus && oldStatus !== order.status) {
@@ -261,8 +277,14 @@
 
               localStorage.setItem("order_" + order.id, order.status);
             });
+          })
+
+          .catch((error) => {
+            console.log(error);
           });
       }
+
+      checkOrderUpdates();
 
       setInterval(checkOrderUpdates, 1000);
     </script>

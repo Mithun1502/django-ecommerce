@@ -1,8 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<style>
- 
-</style>
+<style></style>
 
 <div class="container mt-5 text-center">
   <h2 class="mb-4">My Orders</h2>
@@ -19,6 +17,7 @@
           <th>Payment</th>
           <th>Status</th>
           <th>Ordered On</th>
+          <th>Action</th>
         </tr>
       </thead>
 
@@ -34,13 +33,23 @@
           <td>
             <span
               id="status-{{order.id}}"
-              class="badge {% if order.status == 'Ordered' %} bg-warning text-dark {% elif order.status == 'Shipped' %} bg-primary {% elif order.status == 'Delivered' %} bg-success {% endif %}"
+              class="badge {% if order.status == 'Ordered' %} bg-warning text-dark {% elif order.status == 'Shipped' %} bg-primary {% elif order.status == 'Delivered' %} bg-success {% elif order.status == 'Cancelled' %} bg-danger {% endif %}"
             >
               {{order.status}}
             </span>
           </td>
 
           <td>{{ order.created_at }}</td>
+          <td>
+            {% if order.status == "Ordered" %}
+            <a
+              href="{% url 'cancel_order' order.id %}"
+              class="btn btn-danger btn-sm cancel-order-btn"
+            >
+              Cancel Order
+            </a>
+            {% endif %}
+          </td>
         </tr>
 
         {% empty %}
@@ -52,15 +61,17 @@
     </table>
   </div>
 </div>
-{% comment %} <div class="toast position-fixed bottom-0 end-0 m-3" id="statusToast">
+{% comment %}
+<div class="toast position-fixed bottom-0 end-0 m-3" id="statusToast">
   <div class="toast-header">
     <strong class="me-auto">Order Update</strong>
     <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
   </div>
 
   <div class="toast-body" id="toastBody"></div>
-</div> {% endcomment %}
-{% comment %} <script>
+</div>
+{% endcomment %} {% comment %}
+<script>
   let previousStatuses = {};
 
   function checkOrderUpdates() {
@@ -105,5 +116,5 @@
   }
 
   setInterval(checkOrderUpdates, 1000);
-</script> {% endcomment %}
-{% endblock %}
+</script>
+{% endcomment %} {% endblock %}

@@ -28,13 +28,12 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-
     STATUS_CHOICES = [
         ("Ordered", "Ordered"),
         ("Shipped", "Shipped"),
         ("Delivered", "Delivered"),
+        ("Cancelled", "Cancelled"),
     ]
-
     PAYMENT_CHOICES = [
         ("Card", "Card"),
         ("GPay", "GPay"),
@@ -69,3 +68,4 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     address = models.CharField(max_length=150, default="wrong address")
+    cancel_reason = models.TextField(blank=True, null=True)

@@ -204,13 +204,43 @@ def seller_register(request):
 @seller_required
 def update_order_status(request, order_id):
 
-    order = Order.objects.get(id=order_id)
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": "Invalid request"})
 
-    order.status = request.POST.get("status")
+    try:
 
-    order.save()
+        order = Order.objects.get(id=order_id, product__seller=request.user.seller)
 
-    return JsonResponse({"success": True})
+        if order.status in ["Delivered", "Cancelled"]:
+            return JsonResponse(
+                {"success": False, "message": "Order cannot be modified"}
+            )
+
+        new_status = request.POST.get("status")
+
+        allowed_status = [
+            "Ordered",
+            "Shipped",
+            "Delivered",
+            "Cancelled",
+        ]
+
+        if new_status not in allowed_status:
+            return JsonResponse({"success": False, "message": "Invalid status"})
+
+        if new_status == "Cancelled":
+            order.cancel_reason = request.POST.get("reason")
+
+        order.status = new_status
+        order.save()
+
+        return JsonResponse(
+            {"success": True, "status": order.status, "reason": order.cancel_reason}
+        )
+
+    except Order.DoesNotExist:
+
+        return JsonResponse({"success": False, "message": "Order not found"})
 
 
 @seller_required
@@ -228,6 +258,7 @@ def seller_order_notifications(request):
                 "id": order.id,
                 "customer": order.customer_name,
                 "product": order.product.name,
+                "status": order.status,
             }
         )
 

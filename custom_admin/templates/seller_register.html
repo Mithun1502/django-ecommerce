@@ -15,6 +15,7 @@
     <form method="POST" id="sellerRegisterForm">
       {% csrf_token %}
 
+      <!-- Shop Name -->
       <div class="mb-3">
         <div class="input-group">
           <input
@@ -25,8 +26,10 @@
             required
           />
         </div>
+        <div class="error-container"></div>
       </div>
 
+      <!-- Username -->
       <div class="mb-3">
         <div class="input-group">
           <input
@@ -37,8 +40,10 @@
             required
           />
         </div>
+        <div class="error-container"></div>
       </div>
 
+      <!-- Password -->
       <div class="mb-3">
         <div class="input-group">
           <input
@@ -58,9 +63,11 @@
             <i class="bi bi-eye-fill"></i>
           </span>
         </div>
+        <div class="error-container"></div>
       </div>
 
       <button class="btn btn-success w-100">Register Seller</button>
+
       <div class="already-div text-center my-3">
         <a
           class="text-decoration-none text-danger fw-bold fs-6"
@@ -72,6 +79,7 @@
     </form>
   </div>
 </div>
+{% comment %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("sellerRegisterForm");
@@ -209,6 +217,80 @@
         error.innerText = "Password must contain special character";
 
         password.parentElement.appendChild(error);
+      }
+
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+{% endcomment %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("sellerRegisterForm");
+
+    const shopName = document.querySelector('input[name="shop_name"]');
+    const username = document.querySelector('input[name="username"]');
+    const password = document.querySelector('input[name="password"]');
+
+    form.addEventListener("submit", function (e) {
+      let valid = true;
+
+      document.querySelectorAll(".error-container").forEach((container) => {
+        container.innerHTML = "";
+      });
+
+      shopName.classList.remove("is-invalid");
+      username.classList.remove("is-invalid");
+      password.classList.remove("is-invalid");
+
+      function showError(input, message) {
+        input.classList.add("is-invalid");
+
+        const error = document.createElement("div");
+        error.className = "text-danger mt-1 small error-message";
+        error.innerText = message;
+
+        input
+          .closest(".mb-3")
+          .querySelector(".error-container")
+          .appendChild(error);
+
+        valid = false;
+      }
+
+      // Shop Name Validation
+      if (shopName.value.trim() === "") {
+        showError(shopName, "Shop name is required");
+      } else if (shopName.value.trim().length < 3) {
+        showError(shopName, "Shop name must be at least 3 characters");
+      }
+
+      // Username Validation
+      if (username.value.trim() === "") {
+        showError(username, "Username is required");
+      } else if (username.value.trim().length < 4) {
+        showError(username, "Username must be at least 4 characters");
+      } else if (username.value.trim().length > 20) {
+        showError(username, "Username cannot exceed 20 characters");
+      } else if (!/^[a-zA-Z_]+$/.test(username.value.trim())) {
+        showError(username, "Only letters and underscore (_) allowed");
+      }
+
+      // Password Validation
+      if (password.value === "") {
+        showError(password, "Password is required");
+      } else if (password.value.length < 8) {
+        showError(password, "Password must be at least 8 characters");
+      } else if (!/[A-Z]/.test(password.value)) {
+        showError(password, "Password must contain uppercase letter");
+      } else if (!/[a-z]/.test(password.value)) {
+        showError(password, "Password must contain lowercase letter");
+      } else if (!/[0-9]/.test(password.value)) {
+        showError(password, "Password must contain a number");
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password.value)) {
+        showError(password, "Password must contain special character");
       }
 
       if (!valid) {

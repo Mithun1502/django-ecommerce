@@ -532,8 +532,8 @@ textarea {
 .btn-success,
 .btn-danger,
 .btn-primary {
-    font-size: 16px !important;
-    padding: 10px 20px !important;
+    font-size: 14px !important;
+    padding: 8px 14px !important;
 }
 
 @media (max-width: 230px) {
@@ -1190,15 +1190,119 @@ textarea {
 }
 
 .input-group .input-group-text {
-    background-color: #1a1a1a  !important;
+    background-color: #1a1a1a !important;
     color: #fff !important;
     border: 1px solid #444 !important;
 }
 
 .input-group .form-control {
-    border-right: 1px solid  #444 !important;
+    border-right: 1px solid #444 !important;
 }
 
 .input-group .input-group-text {
     border-left: none !important;
+}
+
+
+.toast {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+
+.toast-header {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+}
+
+.toast-body {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    word-wrap: break-word;
+}
+
+
+@media (max-width: 576px) {
+    .toast {
+        width: 200px !important;
+        min-width: 200px !important;
+        max-width: 200px !important;
+    }
+
+    .toast-header {
+        font-size: 12px !important;
+        padding: 5px 8px !important;
+    }
+
+    .toast-body {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+}
+
+
+@media (max-width: 375px) {
+    .toast {
+        width: 180px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
+    }
+
+    .toast-header {
+        font-size: 11px !important;
+    }
+
+    .toast-body {
+        font-size: 10px !important;
+    }
+}
+
+
+@media (max-width: 250px) {
+    .toast {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+
+    .toast-header {
+        padding: 2px 4px !important;
+        font-size: 8px !important;
+    }
+
+    .toast-body {
+        padding: 2px 4px !important;
+        font-size: 10px !important;
+    }
+
+    .toast .btn-close {
+        transform: scale(0.7);
+    }
+}
+
+.cancel-order-btn {
+    white-space: nowrap;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+}
+
+
+@media (max-width: 575px) {
+    .cancel-order-btn {
+        font-size: 0.75rem;
+        padding: 3px 5px;
+    }
+}
+
+
+@media (max-width: 170px) {
+    .cancel-order-btn {
+        font-size: 0.55rem;
+        padding: 1px 3px;
+        width: 100%;
+        display: block;
+    }
 }

@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from custom_admin.models import Order
 from .forms import EditProfileForm
+from django.shortcuts import render, redirect, get_object_or_404
 
 
 def home(request):
@@ -368,3 +369,22 @@ def seller_order_notifications(request):
         )
 
     return JsonResponse({"orders": data})
+
+
+@login_required
+def cancel_order(request, order_id):
+
+    order = get_object_or_404(Order, id=order_id, customer_email=request.user.email)
+
+    if order.status == "Ordered":
+
+        order.status = "Cancelled"
+        order.save()
+
+        messages.success(request, "Order cancelled successfully.")
+
+    else:
+
+        messages.error(request, "Order already shipped. Cannot cancel.")
+
+    return redirect("customer_orders")

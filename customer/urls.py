@@ -38,4 +38,5 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path("edit-profile/", views.customer_editprofile, name="customer_editprofile"),
     path("check-order-updates/", views.check_order_updates, name="check_order_updates"),
+    path("cancel-order/<int:order_id>/", views.cancel_order, name="cancel_order"),
 ]

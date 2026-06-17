@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Panel</title>
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -29,7 +32,15 @@
         <a href="{% url 'admin_logout' %}">Logout</a>
       </div>
     </nav>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div id="sellerToast" class="toast" role="alert">
+        <div class="toast-header">
+          <strong class="me-auto"> New Order </strong>
+        </div>
 
+        <div class="toast-body" id="sellerToastBody"></div>
+      </div>
+    </div>
     <div class="sidebar">
       <h2>Multi Vendor Panel</h2>
 
@@ -49,7 +60,6 @@
     {% endif %}
 
     <script>
-
       function toggleMenu() {
         document.getElementById("mobileMenu").classList.toggle("show");
       }
@@ -62,6 +72,90 @@
           menu.classList.remove("show");
         }
       });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let knownOrders = [];
+
+        function initializeOrders() {
+          fetch("/admin-panel/seller-order-notifications/")
+            .then((response) => response.json())
+            .then((data) => {
+              knownOrders = data.orders.map((order) => order.id);
+            })
+            .catch((error) => {
+              console.log("Init Error:", error);
+            });
+        }
+
+        function checkNewOrders() {
+          fetch("/admin-panel/seller-order-notifications/")
+            .then((response) => response.json())
+            .then((data) => {
+              data.orders.forEach((order) => {
+                if (!knownOrders.includes(order.id)) {
+                  document.getElementById("sellerToastBody").innerHTML = `
+                    <strong>${order.customer}</strong>
+                    ordered
+                    <strong>${order.product}</strong>
+                    `;
+
+                  const toastElement = document.getElementById("sellerToast");
+
+                  const toast =
+                    bootstrap.Toast.getOrCreateInstance(toastElement);
+
+                  toast.show();
+
+                  knownOrders.push(order.id);
+                }
+              });
+            })
+            .catch((error) => {
+              console.log("Polling Error:", error);
+            });
+        }
+
+        initializeOrders();
+
+        setInterval(checkNewOrders, 1000);
+      });
+    </script>
+    <script>
+      function togglePassword(fieldId) {
+        let field = document.getElementById(fieldId);
+
+        if (field.type === "password") {
+          field.type = "text";
+        } else {
+          field.type = "password";
+        }
+      }
+    </script>
+    <script>
+     function showError(input, message) {
+  removeError(input);
+
+  const error = document.createElement("div");
+  error.className = "error-message";
+  error.innerText = message;
+
+  input.classList.add("is-invalid");
+
+  input.closest(".mb-3").appendChild(error);
+}
+
+function removeError(input) {
+  input.classList.remove("is-invalid");
+
+  const parent = input.closest(".mb-3");
+  const existingError = parent.querySelector(".error-message");
+
+  if (existingError) {
+    existingError.remove();
+  }
+}
     </script>
   </body>
 </html>

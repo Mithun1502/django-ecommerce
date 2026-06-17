@@ -1146,36 +1146,59 @@ textarea {
     min-width: 18px;
     text-align: center;
 }
-@media (max-width: 230px){
 
-    .incredecre{
-        display:flex !important;
-        flex-direction:row !important;
-        align-items:center;
-        justify-content:center;
-        gap:4px;
-        flex-wrap:nowrap;
+@media (max-width: 230px) {
+
+    .incredecre {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex-wrap: nowrap;
     }
 
     .increase-btn,
-    .decrease-btn{
-        width:18px !important;
-        height:18px !important;
-        font-size:12px !important;
-        flex-shrink:0;
+    .decrease-btn {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 12px !important;
+        flex-shrink: 0;
     }
 
-    .incredecre span{
-        font-size:10px !important;
-        min-width:auto;
+    .incredecre span {
+        font-size: 10px !important;
+        min-width: auto;
     }
 
-    .table{
-        font-size:7px;
+    .table {
+        font-size: 7px;
     }
 
     .table td,
-    .table th{
-        padding:2px;
+    .table th {
+        padding: 2px;
     }
+}
+
+.input-group {
+    background-color: #000 !important;
+}
+
+.input-group .form-control {
+    background-color: #1a1a1a !important;
+}
+
+.input-group .input-group-text {
+    background-color: #1a1a1a  !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+}
+
+.input-group .form-control {
+    border-right: 1px solid  #444 !important;
+}
+
+.input-group .input-group-text {
+    border-left: none !important;
 }

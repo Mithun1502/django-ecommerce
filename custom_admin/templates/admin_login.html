@@ -8,23 +8,36 @@
       {% csrf_token %}
 
       <div class="mb-3">
-        <input
-          type="text"
-          name="username"
-          class="form-control"
-          placeholder="Username"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="text"
+            name="username"
+            class="form-control"
+            placeholder="Username"
+            required
+          />
+        </div>
       </div>
 
       <div class="mb-3">
-        <input
-          type="password"
-          name="password"
-          class="form-control"
-          placeholder="Password"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Password"
+            required
+          />
+
+          <span
+            class="input-group-text"
+            onclick="togglePassword('password')"
+            style="cursor: pointer"
+          >
+            <i class="bi bi-eye-fill"></i>
+          </span>
+        </div>
       </div>
 
       <div class="d-grid mb-3">
@@ -51,27 +64,6 @@
     const username = document.querySelector('input[name="username"]');
     const password = document.querySelector('input[name="password"]');
 
-    function showError(input, message) {
-      removeError(input);
-
-      const error = document.createElement("div");
-      error.className = "text-danger mt-1 small";
-      error.innerText = message;
-
-      input.classList.add("is-invalid");
-      input.parentElement.appendChild(error);
-    }
-
-    function removeError(input) {
-      input.classList.remove("is-invalid");
-
-      const existingError = input.parentElement.querySelector(".text-danger");
-
-      if (existingError) {
-        existingError.remove();
-      }
-    }
-
     username.addEventListener("input", function () {
       removeError(username);
 
@@ -97,24 +89,12 @@
       removeError(username);
       removeError(password);
 
-      const usernameValue = username.value.trim();
-      const passwordValue = password.value;
-
-      if (usernameValue === "") {
-        showError(username, "Username is required.");
-        valid = false;
-      } else if (usernameValue.length < 3) {
+      if (username.value.trim().length < 3) {
         showError(username, "Username must be at least 3 characters.");
-        valid = false;
-      } else if (!/^[a-zA-Z_]+$/.test(usernameValue)) {
-        showError(username, "Only letters and underscore are allowed.");
         valid = false;
       }
 
-      if (passwordValue === "") {
-        showError(password, "Password is required.");
-        valid = false;
-      } else if (passwordValue.length < 6) {
+      if (password.value.length < 6) {
         showError(password, "Password must be at least 6 characters.");
         valid = false;
       }

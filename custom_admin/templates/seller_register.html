@@ -1,8 +1,12 @@
 {% extends 'admin_base.html' %} {% block login_content %}
 
-<div class="container d-flex justify-content-center align-items-center vh-100 register-card">
+<div
+  class="container d-flex justify-content-center align-items-center vh-100 register-card"
+>
   <div class="card p-4 shadow admin-login-card" style="width: 400px">
-    <h2 class="text-center text-white mb-4">Seller Registration</h2>
+    <h2 class="text-center text-white mb-5 fw-bold text-info">
+      Seller Registration
+    </h2>
 
     {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
@@ -12,39 +16,59 @@
       {% csrf_token %}
 
       <div class="mb-3">
-        <input
-          type="text"
-          name="shop_name"
-          class="form-control"
-          placeholder="Shop Name"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="text"
+            name="shop_name"
+            class="form-control"
+            placeholder="Shop Name"
+            required
+          />
+        </div>
       </div>
 
       <div class="mb-3">
-        <input
-          type="text"
-          name="username"
-          class="form-control"
-          placeholder="Username"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="text"
+            name="username"
+            class="form-control"
+            placeholder="Username"
+            required
+          />
+        </div>
       </div>
 
       <div class="mb-3">
-        <input
-          type="password"
-          name="password"
-          class="form-control"
-          placeholder="Password"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Password"
+            required
+          />
+
+          <span
+            class="input-group-text"
+            onclick="togglePassword('password')"
+            style="cursor: pointer"
+          >
+            <i class="bi bi-eye-fill"></i>
+          </span>
+        </div>
       </div>
 
       <button class="btn btn-success w-100">Register Seller</button>
-      <a style="font-size:10px;" class="text-decoration-none text-danger fw-bold" href="{% url 'admin_login' %}">
-        Already a seller! Login
-      </a>
+      <div class="already-div text-center my-3">
+        <a
+          class="text-decoration-none text-danger fw-bold fs-6"
+          href="{% url 'admin_login' %}"
+        >
+          Already a seller! Login
+        </a>
+      </div>
     </form>
   </div>
 </div>

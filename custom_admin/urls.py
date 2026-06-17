@@ -17,4 +17,9 @@ urlpatterns = [
         views.update_order_status,
         name="update_order_status",
     ),
+    path(
+        "seller-order-notifications/",
+        views.seller_order_notifications,
+        name="seller_order_notifications",
+    ),
 ]

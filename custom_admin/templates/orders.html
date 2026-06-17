@@ -32,7 +32,7 @@
     margin-top: 5px;
   }
 </style>
-
+<form style="display: none">{% csrf_token %}</form>
 <h2 class="mb-4">Orders</h2>
 
 <div class="table-responsive">
@@ -48,7 +48,6 @@
       </tr>
     </thead>
 
-    ```
     <tbody>
       {% for order in orders %}
       <tr id="order-row-{{ order.id }}">
@@ -76,7 +75,7 @@
             Update
           </button>
 
-          <p id="msg-{{ order.id }}"></p>
+          <p id="msg-{{ order.id }}" style="font: size 15px; "></p>
         </td>
       </tr>
       {% empty %}
@@ -85,7 +84,6 @@
       </tr>
       {% endfor %}
     </tbody>
-    ```
   </table>
 </div>
 

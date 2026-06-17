@@ -337,3 +337,34 @@ def customer_editprofile(request):
         )
 
     return render(request, "customer_editprofile.html", {"form": form})
+
+
+@login_required(login_url="login")
+def check_order_updates(request):
+
+    orders = Order.objects.filter(customer_email=request.user.email).values(
+        "id", "status"
+    )
+
+    return JsonResponse({"orders": list(orders)})
+
+
+@login_required(login_url="login")
+def seller_order_notifications(request):
+
+    orders = Order.objects.filter(product__seller=request.user.seller).order_by(
+        "-created_at"
+    )
+
+    data = []
+
+    for order in orders:
+        data.append(
+            {
+                "id": order.id,
+                "customer": order.customer_name,
+                "product": order.product.name,
+            }
+        )
+
+    return JsonResponse({"orders": data})

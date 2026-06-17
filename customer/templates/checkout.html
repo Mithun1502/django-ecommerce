@@ -49,8 +49,7 @@
 </style>
 <div class="container mt-5">
   <h2 class="mb-4">Checkout</h2>
-
-  <form method="POST" class="checkout-form">
+  <form method="POST" class="checkout-form" id="checkoutForm">
     {% csrf_token %} {% comment %}
     <div class="mb-3">
       <label>Username</label>
@@ -105,15 +104,17 @@
             class="form-control"
             name="card_number"
             maxlength="16"
+            pattern="[0-9]{16}"
           />
         </div>
         <div class="form-group mb-2">
           <label for="card_cvv" class="form-label">Security Pin:</label>
           <input
-            type="number"
+            type="text"
             class="form-control"
             name="card_cvv"
             maxlength="3"
+            pattern="[0-9]{3}"
           />
         </div>
         <div class="form-group mb-2">
@@ -166,6 +167,50 @@
     </button>
   </form>
 </div>
+<!--- payment load aagum 5 second ku then form submission ---->
+<div
+  id="paymentLoader"
+  style="
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+  "
+>
+  <div
+    class="spinner"
+    style="
+      width: 60px;
+      height: 60px;
+      border: 5px solid #333;
+      border-top: 5px solid #0d6efd;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    "
+  ></div>
+  <h4>Processing Payment...</h4>
+  <p>Please wait for 5 seconds</p>
+</div>
+
+<style>
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     //  const username = document.getElementById("id_username");
@@ -199,8 +244,29 @@
 
     validateForm();
   });
-</script>
-<script>
+
+  const form = document.getElementById("checkoutForm");
+  const loader = document.getElementById("paymentLoader");
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const paymentMethodValue =
+        document.getElementById("payment_method").value;
+
+      if (!paymentMethodValue) {
+        alert("Please select a payment method");
+        return;
+      }
+
+      loader.style.display = "flex";
+
+      setTimeout(() => {
+        form.submit();
+      }, 5000);
+    });
+  }
   const paymentMethod = document.getElementById("payment_method");
 
   const cardSection = document.getElementById("cardSection");
@@ -237,4 +303,5 @@
     });
   }
 </script>
+
 {% endblock %}

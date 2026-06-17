@@ -70,8 +70,8 @@ class RegisterForm(forms.Form):
 
         if UserProfile.objects.filter(mobile=mobile).exists():
             raise forms.ValidationError("Mobile number already exists")
-        if not mobile.startswith(("7", "8", "9")):
-            raise forms.ValidationError("Mobile number must start with 7, 8, or 9.")
+        if not mobile.startswith(("6", "7", "8", "9")):
+            raise forms.ValidationError("Mobile number must start with 6, 7, 8, or 9.")
 
         return mobile
 
@@ -158,8 +158,8 @@ class CheckoutForm(forms.Form):
         if UserProfile.objects.filter(mobile=mobile).exists():
             raise forms.ValidationError("Mobile number already exists")
 
-        if not mobile.startswith(("7", "8", "9")):
-            raise forms.ValidationError("Mobile number must start with 7, 8, or 9.")
+        if not mobile.startswith(("6", "7", "8", "9")):
+            raise forms.ValidationError("Mobile number must start with 6, 7, 8, or 9.")
 
         return mobile
 

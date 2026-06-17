@@ -13,7 +13,19 @@
       </div>
 
       <div class="mb-3">
-        {{ form.password.label_tag }} {{ form.password }}
+        <label class="form-label">{{ form.password.label_tag }}</label>
+        <div class="input-group">
+          {{ form.password }}
+
+          <span
+            class="input-group-text"
+            onclick="togglePassword()"
+            style="cursor: pointer"
+          >
+            <i class="bi bi-eye-fill"></i>
+          </span>
+        </div>
+
         <small class="text-danger"> {{ form.password.errors }} </small>
       </div>
 

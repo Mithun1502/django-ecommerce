@@ -5,6 +5,7 @@ from .forms import ProductForm, EditProductForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
 
 
 def admin_login(request):
@@ -200,7 +201,6 @@ def seller_register(request):
     return render(request, "seller_register.html")
 
 
-
 @seller_required
 def update_order_status(request, order_id):
 
@@ -211,3 +211,24 @@ def update_order_status(request, order_id):
     order.save()
 
     return JsonResponse({"success": True})
+
+
+@seller_required
+def seller_order_notifications(request):
+
+    orders = Order.objects.filter(product__seller=request.user.seller).order_by(
+        "-created_at"
+    )
+
+    data = []
+
+    for order in orders:
+        data.append(
+            {
+                "id": order.id,
+                "customer": order.customer_name,
+                "product": order.product.name,
+            }
+        )
+
+    return JsonResponse({"orders": data})

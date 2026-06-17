@@ -1,5 +1,9 @@
 {% extends 'base.html' %} {% block content %}
 
+<style>
+ 
+</style>
+
 <div class="container mt-5 text-center">
   <h2 class="mb-4">My Orders</h2>
   <h1 class="text-warning shadow shadow-lg fw-bold mb-5">
@@ -26,18 +30,14 @@
           <td>{{ order.quantity }}</td>
 
           <td>₹{{ order.total_price }}</td>
-          <td>{{ order.payment_method }} </td>
+          <td>{{ order.payment_method }}</td>
           <td>
-            {% if order.status == "Ordered" %}
-            <span class="badge bg-warning text-dark"> Ordered </span>
-
-            {% elif order.status == "Shipped" %}
-            <span class="badge bg-primary"> Shipped </span>
-
-            {% elif order.status == "Delivered" %}
-            <span class="badge bg-success"> Delivered </span>
-
-            {% endif %}
+            <span
+              id="status-{{order.id}}"
+              class="badge {% if order.status == 'Ordered' %} bg-warning text-dark {% elif order.status == 'Shipped' %} bg-primary {% elif order.status == 'Delivered' %} bg-success {% endif %}"
+            >
+              {{order.status}}
+            </span>
           </td>
 
           <td>{{ order.created_at }}</td>
@@ -52,5 +52,58 @@
     </table>
   </div>
 </div>
+{% comment %} <div class="toast position-fixed bottom-0 end-0 m-3" id="statusToast">
+  <div class="toast-header">
+    <strong class="me-auto">Order Update</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+  </div>
 
+  <div class="toast-body" id="toastBody"></div>
+</div> {% endcomment %}
+{% comment %} <script>
+  let previousStatuses = {};
+
+  function checkOrderUpdates() {
+    fetch("/check-order-updates/")
+      .then((response) => response.json())
+      .then((data) => {
+        data.orders.forEach((order) => {
+          let badge = document.getElementById("status-" + order.id);
+
+          if (!badge) return;
+
+          let currentStatus = badge.innerText.trim();
+
+          if (currentStatus !== order.status) {
+            badge.innerText = order.status;
+
+            badge.className = "badge";
+
+            if (order.status === "Ordered") {
+              badge.classList.add("bg-warning", "text-dark");
+            }
+
+            if (order.status === "Shipped") {
+              badge.classList.add("bg-primary");
+            }
+
+            if (order.status === "Delivered") {
+              badge.classList.add("bg-success");
+            }
+
+            document.getElementById("toastBody").innerText =
+              `Order #${order.id} status changed to ${order.status}`;
+
+            const toast = new bootstrap.Toast(
+              document.getElementById("statusToast"),
+            );
+
+            toast.show();
+          }
+        });
+      });
+  }
+
+  setInterval(checkOrderUpdates, 1000);
+</script> {% endcomment %}
 {% endblock %}

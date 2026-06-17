@@ -15,6 +15,67 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
     />
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <style>
+      #toastBody {
+        color: black !important;
+      }
+      @media (max-width: 171px) {
+        #toastBody {
+          padding: 10px !important;
+          font-size: 15px !important;
+        }
+      }
+      #globalToastBody {
+        color: black !important;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+      }
+
+      @media (max-width: 250px) {
+        #toastBody {
+          padding: 8px !important;
+          font-size: 13px !important;
+          line-height: 1.3;
+        }
+      }
+
+      @media (max-width: 200px) {
+        #toastBody {
+          padding: 6px !important;
+          font-size: 12px !important;
+          line-height: 1.2;
+        }
+
+        #statusToast {
+          width: 95vw !important;
+          right: 2px !important;
+          left: 2px !important;
+        }
+      }
+
+      @media (max-width: 170px) {
+        #toastBody {
+          padding: 4px !important;
+          font-size: 10px !important;
+          line-height: 1.1;
+        }
+
+        #statusToast {
+          width: 98vw !important;
+          margin: 2px !important;
+        }
+
+        .toast-header {
+          font-size: 10px !important;
+          padding: 4px !important;
+        }
+
+        .btn-close {
+          transform: scale(0.7);
+        }
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -105,8 +166,24 @@
     </nav>
 
     <div class="content">{% block content %} {% endblock %}</div>
+    <div
+      class="toast position-fixed bottom-0 end-0 m-3 text-dark"
+      id="globalOrderToast"
+    >
+      <div class="toast-header text-dark">
+        <strong class="me-auto">Order Update</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="toast"
+          data-bs-delay="5000"
+          data-bs-autohide="true"
+        ></button>
+      </div>
 
-    <footer class="text-center">
+      <div class="toast-body text-dark" id="globalToastBody"></div>
+    </div>
+    <footer class="text-center text-dark">
       <div class="container py-5">
         <div class="row">
           <div class="col-md-4">
@@ -155,6 +232,50 @@
           bsCollapse.hide();
         }
       });
+    </script>
+    <script>
+      function checkOrderUpdates() {
+        fetch("/check-order-updates/")
+          .then((res) => {
+            if (!res.ok) {
+              return;
+            }
+
+            return res.json();
+          })
+
+          .then((data) => {
+            if (!data) return;
+
+            data.orders.forEach((order) => {
+              let oldStatus = localStorage.getItem("order_" + order.id);
+
+              if (oldStatus && oldStatus !== order.status) {
+                document.getElementById("globalToastBody").innerText =
+                  `Order #${order.id} is now ${order.status}`;
+
+                new bootstrap.Toast(
+                  document.getElementById("globalOrderToast"),
+                ).show();
+              }
+
+              localStorage.setItem("order_" + order.id, order.status);
+            });
+          });
+      }
+
+      setInterval(checkOrderUpdates, 1000);
+    </script>
+    <script>
+      function togglePassword(fieldId) {
+        let field = document.getElementById(fieldId);
+
+        if (field.type === "password") {
+          field.type = "text";
+        } else {
+          field.type = "password";
+        }
+      }
     </script>
   </body>
 </html>

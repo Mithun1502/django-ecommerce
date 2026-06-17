@@ -155,8 +155,8 @@ class CheckoutForm(forms.Form):
         if len(mobile) != 10:
             raise forms.ValidationError("Mobile number must be exactly 10 digits")
 
-        if UserProfile.objects.filter(mobile=mobile).exists():
-            raise forms.ValidationError("Mobile number already exists")
+        # if UserProfile.objects.filter(mobile=mobile).exists():
+        #     raise forms.ValidationError("Mobile number already exists")
 
         if not mobile.startswith(("6", "7", "8", "9")):
             raise forms.ValidationError("Mobile number must start with 6, 7, 8, or 9.")
